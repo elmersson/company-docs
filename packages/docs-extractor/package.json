@@ -16,6 +16,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "glob": "^13.0.6",
     "ts-morph": "^25.0.0"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ import { extractEvents } from "./extractors/events.js"
 import { extractPrismaSchema } from "./extractors/prisma-schema.js"
 import { extractFrontendApiCalls } from "./extractors/frontend-api-calls.js"
 import { diffExtractions } from "./differ.js"
+import { detectBreakingChanges } from "./breaking-changes.js"
 import type {
   ExtractionSnapshot,
   StructuredChangeSet,
@@ -62,10 +63,7 @@ export function extract(
 }
 
 /**
- * Full pipeline: extract base + head, then diff.
- *
- * Note: detectBreakingChanges is not yet implemented (Phase 7).
- * When it is, this function will also return breakingChanges.
+ * Full pipeline: extract base + head, diff, and detect breaking changes.
  */
 export function extractAndDiff(
   basePath: string,
@@ -81,12 +79,14 @@ export function extractAndDiff(
   },
 ): {
   changeSet: StructuredChangeSet
+  breakingChanges: BreakingChange[]
 } {
   const baseSnapshot = extract(basePath, config)
   const headSnapshot = extract(headPath, config)
   const changeSet = diffExtractions(baseSnapshot, headSnapshot, meta)
+  const breakingChanges = detectBreakingChanges(changeSet)
 
-  return { changeSet }
+  return { changeSet, breakingChanges }
 }
 
 // ---------------------------------------------------------------------------
@@ -94,6 +94,7 @@ export function extractAndDiff(
 // ---------------------------------------------------------------------------
 
 export { diffExtractions } from "./differ.js"
+export { detectBreakingChanges, enrichWithConsumers } from "./breaking-changes.js"
 export { extractExpressRoutes } from "./extractors/express-routes.js"
 export { extractDtoModels } from "./extractors/dto-models.js"
 export { extractEvents } from "./extractors/events.js"

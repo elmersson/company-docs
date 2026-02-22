@@ -117,8 +117,17 @@ function diffModels(
     }
 
     // Check for removed fields (in base but not in head)
+    // Mark removed fields with previousType/previousOptional so the
+    // breaking-change detector can distinguish them from new fields.
     const removedFields: FieldChange[] = baseModel.fields
       .filter((f) => !headFields.has(f.name))
+      .map((f) => ({
+        name: f.name,
+        type: "",
+        optional: f.optional,
+        previousType: f.type,
+        previousOptional: f.optional,
+      }))
 
     if (changedFields.length > 0 || removedFields.length > 0) {
       updated.push({
