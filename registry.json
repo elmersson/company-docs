@@ -1,0 +1,22 @@
+{
+  "services": [
+    {
+      "name": "loan-api",
+      "repo": "elmersson/loan-api",
+      "type": "backend",
+      "framework": "express",
+      "entryPoints": ["src/routes/**/*.ts"],
+      "dtoPatterns": ["src/dto/**/*.ts", "src/models/**/*.ts"],
+      "eventPatterns": ["src/events/**/*.ts"],
+      "prismaSchema": "prisma/schema.prisma"
+    },
+    {
+      "name": "web-checkout",
+      "repo": "elmersson/web-checkout",
+      "type": "frontend",
+      "framework": "react",
+      "apiCallPatterns": ["src/api/**/*.ts", "src/services/**/*.ts"],
+      "dtoPatterns": ["src/types/**/*.ts"]
+    }
+  ]
+}
