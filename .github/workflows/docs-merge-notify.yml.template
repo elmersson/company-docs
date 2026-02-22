@@ -1,0 +1,49 @@
+# =============================================================================
+# Documentation Merge/Close Notification — Source Repo Workflow Template
+# =============================================================================
+#
+# Copy this file to your source repo as .github/workflows/docs-merge-notify.yml
+# and update the service name and repository references.
+#
+# Required secrets:
+#   DOCS_REPO_TOKEN — Fine-grained PAT scoped to company-docs (read/write)
+#
+name: Notify Docs on PR Merge/Close
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  notify-merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DOCS_REPO_TOKEN }}
+          repository: elmersson/company-docs     # Change to your org
+          event-type: source-pr-merged
+          client-payload: |
+            {
+              "service": "loan-api",
+              "prNumber": ${{ github.event.pull_request.number }},
+              "sourceRepo": "${{ github.repository }}",
+              "sourcePrUrl": "${{ github.event.pull_request.html_url }}",
+              "mergedBy": "${{ github.event.pull_request.merged_by.login }}",
+              "mergedAt": "${{ github.event.pull_request.merged_at }}"
+            }
+
+  notify-closed:
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DOCS_REPO_TOKEN }}
+          repository: elmersson/company-docs     # Change to your org
+          event-type: source-pr-closed
+          client-payload: |
+            {
+              "service": "loan-api",
+              "prNumber": ${{ github.event.pull_request.number }}
+            }
