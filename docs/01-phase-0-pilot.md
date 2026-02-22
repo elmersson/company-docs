@@ -111,11 +111,11 @@ Create these GitHub secrets at the org level (or per-repo):
 
 ## Acceptance Criteria
 
-- [ ] Two repos selected (one backend, one frontend)
-- [ ] Both repos audited against the checklist
-- [ ] `registry.json` created with both repos
-- [ ] GitHub secrets configured
-- [ ] Teams notified and onboarded
+- [x] Two repos selected (one backend, one frontend)
+- [x] Both repos audited against the checklist
+- [x] `registry.json` created with both repos
+- [x] GitHub secrets configured
+- [x] Teams notified and onboarded
 
 ---
 
