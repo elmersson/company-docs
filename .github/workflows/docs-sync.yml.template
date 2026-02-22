@@ -1,0 +1,53 @@
+# =============================================================================
+# Documentation Sync — Source Repo Workflow Template
+# =============================================================================
+#
+# Copy this file to your source repo as .github/workflows/docs-sync.yml
+# and update the `with:` block to match your service configuration.
+#
+# Required secrets:
+#   ANTHROPIC_API_KEY  — Anthropic API key for Claude
+#   DOCS_REPO_TOKEN    — Fine-grained PAT scoped to company-docs (read/write)
+#
+# Backend example (Express):
+#
+name: Documentation Sync
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write  # To post comments on source PR
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for base branch comparison
+
+      - uses: elmersson/company-docs/.github/actions/docs-sync@main
+        with:
+          service-name: loan-api              # Change to your service name
+          repo-type: backend                  # "backend" or "frontend"
+          framework: express                  # "express" or "react"
+          entry-points: '["src/routes/**/*.ts"]'
+          dto-patterns: '["src/dto/**/*.ts", "src/models/**/*.ts"]'
+          event-patterns: '["src/events/**/*.ts"]'
+          prisma-schema-path: "prisma/schema.prisma"
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          docs-repo-token: ${{ secrets.DOCS_REPO_TOKEN }}
+
+# =============================================================================
+# Frontend example (React):
+# =============================================================================
+#
+#     - uses: elmersson/company-docs/.github/actions/docs-sync@main
+#       with:
+#         service-name: web-checkout
+#         repo-type: frontend
+#         framework: react
+#         api-call-patterns: '["src/api/**/*.ts", "src/services/**/*.ts"]'
+#         dto-patterns: '["src/types/**/*.ts"]'
+#         anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+#         docs-repo-token: ${{ secrets.DOCS_REPO_TOKEN }}

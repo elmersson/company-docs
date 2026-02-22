@@ -222,7 +222,7 @@ Update this section as work progresses:
 | Phase 1 | Done | Contracts defined in `contracts/` |
 | Phase 2 | Done | `packages/docs-extractor/src/differ.ts` with full tests |
 | Phase 3 | Done | 5 extractors + `extract()`/`extractAndDiff()` API with 63 tests |
-| Phase 4 | Not started | |
+| Phase 4 | Done | Composite action + 4 scripts + source repo workflow templates |
 | Phase 5 | Not started | |
 | Phase 6 | Not started | |
 | Phase 7 | Not started | |
