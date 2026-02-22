@@ -370,7 +370,8 @@ describe("diffExtractions – models", () => {
     const updated = result.models.updated[0]
     const removedField = updated.fields.find((f) => f.name === "employmentStatus")
     expect(removedField).toBeDefined()
-    expect(removedField!.type).toBe("EmploymentStatus")
+    expect(removedField!.type).toBe("")
+    expect(removedField!.previousType).toBe("EmploymentStatus")
   })
 
   it("detects field type changes with previousType", () => {

@@ -42,7 +42,7 @@ console.log(`Extracting changes for ${meta.service} (${config.type}/${config.fra
 console.log(`  BASE: ${process.env.BASE_PATH}`)
 console.log(`  HEAD: ${process.env.HEAD_PATH}`)
 
-const { changeSet } = extractAndDiff(
+const { changeSet, breakingChanges } = extractAndDiff(
   process.env.BASE_PATH!,
   process.env.HEAD_PATH!,
   config,
@@ -81,8 +81,7 @@ if (isEmpty) {
 
 writeFileSync("/tmp/docs-sync/changeset.json", JSON.stringify(changeSet, null, 2))
 
-// Breaking change detection is Phase 7 — write empty array for now
-writeFileSync("/tmp/docs-sync/breaking-changes.json", JSON.stringify([], null, 2))
+writeFileSync("/tmp/docs-sync/breaking-changes.json", JSON.stringify(breakingChanges, null, 2))
 
 console.log(`Extraction complete:`)
 console.log(`  API: +${changeSet.api.added.length} ~${changeSet.api.updated.length} -${changeSet.api.removed.length}`)
