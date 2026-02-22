@@ -111,6 +111,19 @@ export type StructuredChangeSet = {
   }
 }
 
+// --- Flow types ---
+
+export type FlowMatch = {
+  flowName: string
+  frontendService: string
+  backendService: string
+  frontendCall: FrontendApiCall
+  backendRoute: RouteChange
+  requestDto?: ModelChange
+  responseDto?: ModelChange
+  events: EventChange[]
+}
+
 // --- Breaking change types ---
 
 export type BreakingChange = {

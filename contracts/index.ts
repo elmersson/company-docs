@@ -9,6 +9,7 @@ export type {
   ColumnModification,
   TableChange,
   FrontendApiCall,
+  FlowMatch,
   StructuredChangeSet,
 } from "./StructuredChangeSet.js"
 

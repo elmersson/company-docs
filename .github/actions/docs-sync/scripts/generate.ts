@@ -21,8 +21,10 @@ import type {
   RouteChange,
   ModelChange,
   EventChange,
+  FlowMatch,
   DocFragment,
 } from "../../../../packages/docs-extractor/src/types.js"
+import { detectFlows } from "../../../../packages/docs-extractor/src/flow-detector.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -376,6 +378,63 @@ async function generateBreakingChangeReport(): Promise<DocFragment> {
 }
 
 // ---------------------------------------------------------------------------
+// Flow doc generation (Phase 8)
+// ---------------------------------------------------------------------------
+
+function hasFlowData(cs: StructuredChangeSet): boolean {
+  return !!(
+    cs.frontendApiCalls &&
+    (cs.frontendApiCalls.added.length > 0 || cs.frontendApiCalls.updated.length > 0) &&
+    (cs.api.added.length > 0 || cs.api.updated.length > 0)
+  )
+}
+
+async function generateFlowDocs(): Promise<DocFragment[]> {
+  if (!changeSet.frontendApiCalls) return []
+
+  const frontendCalls = [
+    ...changeSet.frontendApiCalls.added,
+    ...changeSet.frontendApiCalls.updated,
+  ]
+  const backendRoutes = [...changeSet.api.added, ...changeSet.api.updated]
+  const backendEvents = [...changeSet.events.added, ...changeSet.events.updated]
+  const allModels = [...changeSet.models.added, ...changeSet.models.updated]
+
+  const flows = detectFlows(
+    frontendCalls,
+    backendRoutes,
+    backendEvents,
+    allModels,
+    changeSet.service,
+    changeSet.service,
+  )
+
+  if (flows.length === 0) return []
+
+  return batchGenerate(flows, async (flow) => {
+    const html = await callClaudeWithRetry("flow-docs.md", {
+      flowName: flow.flowName,
+      frontendCalls: [flow.frontendCall],
+      backendRoutes: [flow.backendRoute],
+      events: flow.events,
+      models: [flow.requestDto, flow.responseDto].filter(Boolean),
+    })
+
+    const slug = flow.flowName
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .toLowerCase()
+
+    const fragment: DocFragment = {
+      ...makeFragmentBase("flow", flow.flowName),
+      html,
+      outputPath: `${changeSet.service}/flows/${slug}.html`,
+    }
+
+    return fragment
+  })
+}
+
+// ---------------------------------------------------------------------------
 // Main pipeline
 // ---------------------------------------------------------------------------
 
@@ -408,6 +467,13 @@ async function generateDocs(): Promise<DocFragment[]> {
     const breakingFragment = await generateBreakingChangeReport()
     fragments.push(breakingFragment)
     console.log("  Generated 1 breaking change report")
+  }
+
+  if (hasFlowData(changeSet)) {
+    console.log("Generating flow documentation...")
+    const flowFragments = await generateFlowDocs()
+    fragments.push(...flowFragments)
+    console.log(`  Generated ${flowFragments.length} flow fragment(s)`)
   }
 
   return fragments
