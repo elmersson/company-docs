@@ -104,6 +104,38 @@ export type FrontendApiCall = {
   sourceFile: string
 }
 
+// --- Flow types ---
+
+/**
+ * A detected cross-service flow matching a frontend API call
+ * to a backend route, with related DTOs and events.
+ */
+export type FlowMatch = {
+  /** Generated flow name (e.g. "CreateLoanFlow") */
+  flowName: string
+
+  /** Frontend service that initiates the call */
+  frontendService: string
+
+  /** Backend service that handles the request */
+  backendService: string
+
+  /** The frontend API call */
+  frontendCall: FrontendApiCall
+
+  /** The matching backend route */
+  backendRoute: RouteChange
+
+  /** Request DTO (if detected) */
+  requestDto?: ModelChange
+
+  /** Response DTO (if detected) */
+  responseDto?: ModelChange
+
+  /** Events emitted by the backend handler */
+  events: EventChange[]
+}
+
 // --- Main Type ---
 
 /**

@@ -95,6 +95,7 @@ export function extractAndDiff(
 
 export { diffExtractions } from "./differ.js"
 export { detectBreakingChanges, enrichWithConsumers } from "./breaking-changes.js"
+export { detectFlows, normalizeUrl, matchRoute, generateFlowName } from "./flow-detector.js"
 export { extractExpressRoutes } from "./extractors/express-routes.js"
 export { extractDtoModels } from "./extractors/dto-models.js"
 export { extractEvents } from "./extractors/events.js"
@@ -112,6 +113,7 @@ export type {
   TableChange,
   FrontendApiCall,
   StructuredChangeSet,
+  FlowMatch,
   BreakingChange,
   BreakingChangeReport,
   DocFragment,
