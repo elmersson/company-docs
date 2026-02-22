@@ -1,0 +1,162 @@
+# =============================================================================
+# Auto-Merge Documentation PRs — Phase 9
+# =============================================================================
+#
+# Triggers:
+#   1. repository_dispatch: source-pr-merged  → auto-merge the docs PR
+#   2. repository_dispatch: source-pr-closed  → close the orphaned docs PR
+#   3. workflow_dispatch (manual)              → cleanup stale docs PRs
+#
+# Required permissions:
+#   GITHUB_TOKEN with write access to PRs (built-in)
+#   --admin flag requires admin access or GitHub App token
+#
+name: Auto-Merge Documentation PRs
+
+on:
+  repository_dispatch:
+    types:
+      - source-pr-merged
+      - source-pr-closed
+
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform"
+        required: true
+        default: "cleanup"
+        type: choice
+        options:
+          - cleanup
+          - merge
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: Auto-merge docs PR when source PR is merged
+  # ---------------------------------------------------------------------------
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'repository_dispatch' &&
+      github.event.action == 'source-pr-merged'
+    steps:
+      - name: Extract payload
+        id: payload
+        run: |
+          echo "service=${{ github.event.client_payload.service }}" >> $GITHUB_OUTPUT
+          echo "pr_number=${{ github.event.client_payload.prNumber }}" >> $GITHUB_OUTPUT
+          echo "source_repo=${{ github.event.client_payload.sourceRepo }}" >> $GITHUB_OUTPUT
+
+      - name: Find matching docs PR
+        id: find-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="docs/${{ steps.payload.outputs.service }}/pr-${{ steps.payload.outputs.pr_number }}"
+
+          # Find open PR with this branch
+          PR_NUMBER=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --head "$BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No matching docs PR found for branch: $BRANCH"
+            echo "found=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found docs PR #$PR_NUMBER"
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Auto-merge docs PR
+        if: steps.find-pr.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ steps.find-pr.outputs.pr_number }}
+
+          # Add a comment noting the auto-merge reason
+          gh pr comment $PR_NUMBER \
+            --repo ${{ github.repository }} \
+            --body "Auto-merging: source PR in ${{ steps.payload.outputs.source_repo }} has been merged.
+
+          Merged by: ${{ github.event.client_payload.mergedBy }}
+          Merged at: ${{ github.event.client_payload.mergedAt }}"
+
+          # Merge the PR (squash to keep history clean)
+          gh pr merge $PR_NUMBER \
+            --repo ${{ github.repository }} \
+            --squash \
+            --delete-branch \
+            --admin
+
+          echo "Successfully merged docs PR #$PR_NUMBER"
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Close orphaned docs PR when source PR is closed without merging
+  # ---------------------------------------------------------------------------
+  close-orphaned:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'repository_dispatch' &&
+      github.event.action == 'source-pr-closed'
+    steps:
+      - name: Close orphaned docs PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="docs/${{ github.event.client_payload.service }}/pr-${{ github.event.client_payload.prNumber }}"
+
+          PR_NUMBER=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --head "$BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr close $PR_NUMBER \
+              --repo ${{ github.repository }} \
+              --delete-branch \
+              --comment "Closing: source PR was closed without merging."
+            echo "Closed orphaned docs PR #$PR_NUMBER"
+          else
+            echo "No matching docs PR found for branch: $BRANCH"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Job 3: Scheduled cleanup for stale docs PRs (manual trigger)
+  # ---------------------------------------------------------------------------
+  scheduled-cleanup:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.action == 'cleanup'
+    steps:
+      - name: Find and close stale docs PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Find all open docs PRs older than 7 days
+          STALE_PRS=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --label "auto-generated" \
+            --json number,headRefName,createdAt \
+            --jq '.[] | select(.createdAt < (now - 604800 | todate)) | .number')
+
+          if [ -z "$STALE_PRS" ]; then
+            echo "No stale docs PRs found"
+            exit 0
+          fi
+
+          for PR in $STALE_PRS; do
+            echo "Closing stale docs PR #$PR"
+            gh pr close $PR \
+              --repo ${{ github.repository }} \
+              --delete-branch \
+              --comment "Closing: source PR appears to be abandoned (>7 days old)"
+          done
