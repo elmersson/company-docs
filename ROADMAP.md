@@ -219,8 +219,8 @@ Update this section as work progresses:
 | Phase | Status | Notes |
 |---|---|---|
 | Phase 0 | Not started | |
-| Phase 1 | Not started | |
-| Phase 2 | Not started | |
+| Phase 1 | Done | Contracts defined in `contracts/` |
+| Phase 2 | Done | `packages/docs-extractor/src/differ.ts` with full tests |
 | Phase 3 | Not started | |
 | Phase 4 | Not started | |
 | Phase 5 | Not started | |
