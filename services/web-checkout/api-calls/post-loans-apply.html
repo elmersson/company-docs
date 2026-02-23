@@ -8,31 +8,54 @@
     <p class="consumes-badge">Consumes: <a href="/company-docs/loan-api/api/post-loans-apply">loan-api</a></p>
   </header>
 
-  <section>
-    <p>Submits a new loan application from the checkout flow. Called when the user completes the loan application form and clicks "Apply".</p>
+  <section class="screen-info">
+    <h3>Screen</h3>
+    <table>
+      <tbody>
+        <tr><td><strong>Page</strong></td><td>Loan Application (<code>/apply</code>)</td></tr>
+        <tr><td><strong>Component</strong></td><td><code>LoanApplicationPage</code> &rarr; <code>ApplicationForm</code> &rarr; <code>SubmitButton</code></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>User click &mdash; fires when the user completes the multi-step form and clicks &ldquo;Submit Application&rdquo;</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <section>
+  <section class="endpoint-description">
+    <h3>Description</h3>
+    <p>Submits a new loan application from the checkout flow. The application form collects loan amount, purpose, and desired term across a multi-step wizard. On successful submission the user is redirected to a confirmation screen with their application reference number.</p>
+  </section>
+
+  <section class="frontend-logic">
+    <h3>Frontend Logic</h3>
+    <ul>
+      <li><strong>Form validation:</strong> Client-side validation via <code>react-hook-form</code> with Zod schema &mdash; amount must be between 1,000 and 500,000, term between 6 and 60 months</li>
+      <li><strong>Optimistic UI:</strong> The submit button enters a loading state with spinner immediately on click; disabled to prevent double-submission</li>
+      <li><strong>Success flow:</strong> On 201 response, navigates to <code>/apply/confirmation</code> with the new loan ID, clears form draft from <code>sessionStorage</code></li>
+      <li><strong>Error handling:</strong> On 422 (validation error), maps server field errors back to the form fields; on 429 (rate limit), shows a &ldquo;Please wait&rdquo; toast with countdown; on 5xx, shows a retry dialog</li>
+      <li><strong>Draft persistence:</strong> Form state is auto-saved to <code>sessionStorage</code> every 2 seconds so the user can resume if they navigate away</li>
+    </ul>
+  </section>
+
+  <section class="request-details">
     <h3>Request</h3>
-    <p>Sends a <code>LoanApplicationDto</code> as the request body.</p>
+    <p>Sends a <code>LoanApplicationDto</code> as JSON request body. Requires <code>Authorization: Bearer &lt;token&gt;</code> header.</p>
     <table>
       <thead>
         <tr><th>Field</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>amount</code></td><td>number</td><td>Requested loan amount</td></tr>
-        <tr><td><code>purpose</code></td><td>string</td><td>Purpose of the loan</td></tr>
-        <tr><td><code>term</code></td><td>number</td><td>Loan term in months</td></tr>
+        <tr><td><code>amount</code></td><td>number</td><td>Requested loan amount (1,000&ndash;500,000)</td></tr>
+        <tr><td><code>purpose</code></td><td>string</td><td>Purpose of the loan (free text)</td></tr>
+        <tr><td><code>term</code></td><td>number</td><td>Loan term in months (6&ndash;60)</td></tr>
       </tbody>
     </table>
   </section>
 
-  <section>
+  <section class="response-details">
     <h3>Response</h3>
-    <p>Returns a <code>LoanResultDto</code> with the application result.</p>
+    <p>Returns a <code>LoanResultDto</code> with the application outcome. The frontend checks the <code>status</code> field to determine whether to show the success confirmation or a &ldquo;pending review&rdquo; interstitial.</p>
   </section>
 
   <footer class="endpoint-meta">
-    <small>Called from: <code>src/api/loan.api.ts</code></small>
+    <small>Called from: <code>src/api/loan.api.ts</code> &middot; Used by: <code>src/pages/apply/LoanApplicationPage.tsx</code></small>
   </footer>
 </article>

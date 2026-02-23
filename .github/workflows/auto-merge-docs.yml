@@ -7,10 +7,6 @@
 #   2. repository_dispatch: source-pr-closed  → close the orphaned docs PR
 #   3. workflow_dispatch (manual)              → cleanup stale docs PRs
 #
-# Required permissions:
-#   GITHUB_TOKEN with write access to PRs (built-in)
-#   --admin flag requires admin access or GitHub App token
-#
 name: Auto-Merge Documentation PRs
 
 on:
@@ -29,6 +25,11 @@ on:
         options:
           - cleanup
           - merge
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -90,8 +91,7 @@ jobs:
           gh pr merge $PR_NUMBER \
             --repo ${{ github.repository }} \
             --squash \
-            --delete-branch \
-            --admin
+            --delete-branch
 
           echo "Successfully merged docs PR #$PR_NUMBER"
 
