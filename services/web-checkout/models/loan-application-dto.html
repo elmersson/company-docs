@@ -1,0 +1,63 @@
+<article>
+  <h2 class="model-title">
+    LoanApplicationDto
+    <span class="badge-new">New</span>
+  </h2>
+  
+  <section>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>amount</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>The requested loan amount</td>
+        </tr>
+        <tr>
+          <td>termMonths</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Loan term duration in months</td>
+        </tr>
+        <tr>
+          <td>employmentStatus</td>
+          <td><code>EmploymentStatus</code></td>
+          <td>Yes</td>
+          <td>Current employment status of the applicant</td>
+        </tr>
+        <tr>
+          <td>applicantName</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Full name of the loan applicant</td>
+        </tr>
+        <tr>
+          <td>applicantEmail</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Email address of the loan applicant</td>
+        </tr>
+        <tr>
+          <td>annualIncome</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Annual income amount of the applicant</td>
+        </tr>
+        <tr>
+          <td>notes</td>
+          <td><code>string | undefined</code></td>
+          <td>No</td>
+          <td>Additional notes or comments for the application</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

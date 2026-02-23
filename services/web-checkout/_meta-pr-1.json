@@ -1,0 +1,72 @@
+[
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "LoanApplicationDto",
+    "outputPath": "web-checkout/models/loan-application-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:39.047Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "LoanDetailDto",
+    "outputPath": "web-checkout/models/loan-detail-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:39.784Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "UpdateLoanDto",
+    "outputPath": "web-checkout/models/update-loan-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:38.440Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "LoanResultDto",
+    "outputPath": "web-checkout/models/loan-result-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:41.848Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "CreatePaymentDto",
+    "outputPath": "web-checkout/models/create-payment-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:40.174Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "PaymentDto",
+    "outputPath": "web-checkout/models/payment-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:47.862Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "PaymentSummaryDto",
+    "outputPath": "web-checkout/models/payment-summary-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:47.291Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  }
+]
