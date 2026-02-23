@@ -1,0 +1,35 @@
+<article class="api-call-docs">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-get">GET</span>
+      /loans/:id
+      <span class="new-badge">New</span>
+    </h2>
+    <p class="consumes-badge">Consumes: <a href="/loan-api/api/get-loans-id">loan-api</a></p>
+  </header>
+
+  <section>
+    <p>Fetches detailed information for a specific loan. Used on the loan detail page to show full loan status, terms, and payment history.</p>
+  </section>
+
+  <section>
+    <h3>Request</h3>
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Location</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>Path</td><td>The loan identifier</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h3>Response</h3>
+    <p>Returns a <code>LoanDetailDto</code> with full loan details.</p>
+  </section>
+
+  <footer class="endpoint-meta">
+    <small>Called from: <code>src/api/loan.api.ts</code></small>
+  </footer>
+</article>

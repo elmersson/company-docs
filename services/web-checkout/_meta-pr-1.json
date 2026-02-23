@@ -68,5 +68,65 @@
     "generatedAt": "2026-02-23T07:31:47.291Z",
     "sourceRepo": "elmersson/web-checkout",
     "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "POST /loans/apply",
+    "outputPath": "web-checkout/api-calls/post-loans-apply.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.100Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "GET /loans",
+    "outputPath": "web-checkout/api-calls/get-loans.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.200Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "GET /loans/:id",
+    "outputPath": "web-checkout/api-calls/get-loans-id.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.300Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "PUT /loans/:id",
+    "outputPath": "web-checkout/api-calls/put-loans-id.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.400Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "POST /loans/:loanId/payments",
+    "outputPath": "web-checkout/api-calls/post-loans-loanId-payments.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.500Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
+  },
+  {
+    "service": "web-checkout",
+    "docType": "api-calls",
+    "entity": "GET /loans/:loanId/payments",
+    "outputPath": "web-checkout/api-calls/get-loans-loanId-payments.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T07:31:48.600Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 1
   }
 ]

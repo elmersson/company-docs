@@ -3,24 +3,32 @@ interface Props {
   name: string
   type: string
   apiCount: number
+  apiCallCount: number
   modelCount: number
   eventCount: number
   flowCount: number
   hasBreakingChanges: boolean
 }
 
-const { name, type, apiCount, modelCount, eventCount, flowCount, hasBreakingChanges } = Astro.props
-const totalDocs = apiCount + modelCount + eventCount + flowCount
+const { name, type, apiCount, apiCallCount, modelCount, eventCount, flowCount, hasBreakingChanges } = Astro.props
+const totalDocs = apiCount + apiCallCount + modelCount + eventCount + flowCount
+
+// Link to the first doc type that has content
+const DOC_TYPE_ORDER = ["api", "api-calls", "models", "events", "flows"] as const
+const counts: Record<string, number> = { api: apiCount, "api-calls": apiCallCount, models: modelCount, events: eventCount, flows: flowCount }
+const firstDocType = DOC_TYPE_ORDER.find(dt => counts[dt] > 0) || "api"
+const href = `/${name}/${firstDocType}`
 ---
 
-<a href={`/${name}/api`} class="service-card">
+<a href={href} class="service-card">
   <div class="card-header">
     <h3>{name}</h3>
     <span class="card-type">{type}</span>
     {hasBreakingChanges && <span class="badge-breaking">BREAKING</span>}
   </div>
   <div class="card-stats">
-    {apiCount > 0 && <span class="stat">{apiCount} API{apiCount !== 1 ? "s" : ""}</span>}
+    {apiCount > 0 && <span class="stat">{apiCount} Endpoint{apiCount !== 1 ? "s" : ""}</span>}
+    {apiCallCount > 0 && <span class="stat">{apiCallCount} API Call{apiCallCount !== 1 ? "s" : ""}</span>}
     {modelCount > 0 && <span class="stat">{modelCount} Model{modelCount !== 1 ? "s" : ""}</span>}
     {eventCount > 0 && <span class="stat">{eventCount} Event{eventCount !== 1 ? "s" : ""}</span>}
     {flowCount > 0 && <span class="stat">{flowCount} Flow{flowCount !== 1 ? "s" : ""}</span>}
