@@ -1,4 +1,5 @@
 import { Project, SyntaxKind } from "ts-morph"
+import { existsSync } from "fs"
 import type { EventChange } from "../types.js"
 
 /**
@@ -12,8 +13,9 @@ export function extractEvents(
   projectPath: string,
   eventPatterns: string[],
 ): EventChange[] {
+  const tsConfigPath = `${projectPath}/tsconfig.json`
   const project = new Project({
-    tsConfigFilePath: `${projectPath}/tsconfig.json`,
+    ...(existsSync(tsConfigPath) ? { tsConfigFilePath: tsConfigPath } : {}),
     skipAddingFilesFromTsConfig: true,
     skipFileDependencyResolution: true,
   })

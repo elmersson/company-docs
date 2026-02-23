@@ -1,4 +1,5 @@
 import { Project, SyntaxKind, type CallExpression } from "ts-morph"
+import { existsSync } from "fs"
 import type { FrontendApiCall } from "../types.js"
 
 /**
@@ -12,8 +13,9 @@ export function extractFrontendApiCalls(
   projectPath: string,
   apiCallPatterns: string[],
 ): FrontendApiCall[] {
+  const tsConfigPath = `${projectPath}/tsconfig.json`
   const project = new Project({
-    tsConfigFilePath: `${projectPath}/tsconfig.json`,
+    ...(existsSync(tsConfigPath) ? { tsConfigFilePath: tsConfigPath } : {}),
     skipAddingFilesFromTsConfig: true,
     skipFileDependencyResolution: true,
   })

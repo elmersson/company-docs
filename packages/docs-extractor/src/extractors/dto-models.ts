@@ -1,4 +1,5 @@
 import { Project } from "ts-morph"
+import { existsSync } from "fs"
 import type { ModelChange, FieldChange } from "../types.js"
 
 /**
@@ -12,8 +13,9 @@ export function extractDtoModels(
   projectPath: string,
   dtoPatterns: string[],
 ): ModelChange[] {
+  const tsConfigPath = `${projectPath}/tsconfig.json`
   const project = new Project({
-    tsConfigFilePath: `${projectPath}/tsconfig.json`,
+    ...(existsSync(tsConfigPath) ? { tsConfigFilePath: tsConfigPath } : {}),
     skipAddingFilesFromTsConfig: true,
     skipFileDependencyResolution: true,
   })
