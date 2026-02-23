@@ -59,38 +59,38 @@ runs:
       with:
         version: 9
 
-    # Step 3: Copy HEAD source (caller has already checked out the PR head)
+    # Step 3: Create workspace directory and copy HEAD source
     - name: Copy HEAD source
       shell: bash
       run: |
-        mkdir -p /tmp/docs-sync/head
-        cp -r . /tmp/docs-sync/head/
+        mkdir -p .docs-sync/head
+        rsync -a --exclude='.docs-sync' . .docs-sync/head/
 
-    # Step 4: Checkout source repo at BASE
+    # Step 4: Checkout source repo at BASE (relative path inside workspace)
     - name: Checkout BASE branch
       uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.base.sha }}
-        path: /tmp/docs-sync/base
+        path: .docs-sync/base
 
-    # Step 5: Checkout company-docs (for extractor + prompts + scripts)
+    # Step 5: Checkout company-docs (relative path inside workspace)
     - name: Checkout company-docs
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docs-repo }}
         token: ${{ inputs.docs-repo-token }}
-        path: /tmp/docs-sync/company-docs
+        path: .docs-sync/company-docs
 
     # Step 6: Install extractor dependencies
     - name: Install extractor
       shell: bash
-      working-directory: /tmp/docs-sync/company-docs
+      working-directory: .docs-sync/company-docs
       run: pnpm install --filter @company/docs-extractor
 
     # Step 7: Run extraction + diff
     - name: Extract and diff
       shell: bash
-      working-directory: /tmp/docs-sync/company-docs
+      working-directory: .docs-sync/company-docs
       env:
         SERVICE_NAME: ${{ inputs.service-name }}
         REPO_TYPE: ${{ inputs.repo-type }}
@@ -100,8 +100,9 @@ runs:
         EVENT_PATTERNS: ${{ inputs.event-patterns }}
         API_CALL_PATTERNS: ${{ inputs.api-call-patterns }}
         PRISMA_SCHEMA: ${{ inputs.prisma-schema-path }}
-        BASE_PATH: /tmp/docs-sync/base
-        HEAD_PATH: /tmp/docs-sync/head
+        BASE_PATH: ${{ github.workspace }}/.docs-sync/base
+        HEAD_PATH: ${{ github.workspace }}/.docs-sync/head
+        SYNC_DIR: ${{ github.workspace }}/.docs-sync
         SOURCE_REPO: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
         BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
@@ -113,11 +114,12 @@ runs:
     # Step 8: Generate docs with Claude (Phase 5)
     - name: Generate documentation
       shell: bash
-      working-directory: /tmp/docs-sync/company-docs
+      working-directory: .docs-sync/company-docs
       env:
         ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
-        CHANGESET_PATH: /tmp/docs-sync/changeset.json
-        BREAKING_CHANGES_PATH: /tmp/docs-sync/breaking-changes.json
+        SYNC_DIR: ${{ github.workspace }}/.docs-sync
+        CHANGESET_PATH: ${{ github.workspace }}/.docs-sync/changeset.json
+        BREAKING_CHANGES_PATH: ${{ github.workspace }}/.docs-sync/breaking-changes.json
         SERVICE_NAME: ${{ inputs.service-name }}
       run: |
         npx tsx .github/actions/docs-sync/scripts/generate.ts
@@ -125,7 +127,7 @@ runs:
     # Step 9: Create PR in company-docs (Phase 6)
     - name: Create docs PR
       shell: bash
-      working-directory: /tmp/docs-sync/company-docs
+      working-directory: .docs-sync/company-docs
       env:
         GITHUB_TOKEN: ${{ inputs.docs-repo-token }}
         DOCS_REPO: ${{ inputs.docs-repo }}
@@ -133,17 +135,22 @@ runs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         SOURCE_REPO: ${{ github.repository }}
         SOURCE_PR_URL: ${{ github.event.pull_request.html_url }}
-        FRAGMENTS_PATH: /tmp/docs-sync/fragments.json
+        SYNC_DIR: ${{ github.workspace }}/.docs-sync
+        FRAGMENTS_PATH: ${{ github.workspace }}/.docs-sync/fragments.json
+        BREAKING_CHANGES_PATH: ${{ github.workspace }}/.docs-sync/breaking-changes.json
+        DOCS_DIR: ${{ github.workspace }}/.docs-sync/company-docs
       run: |
         npx tsx .github/actions/docs-sync/scripts/create-pr.ts
 
     # Step 10: Post comment on source PR (Phase 6)
     - name: Comment on source PR
       shell: bash
+      working-directory: .docs-sync/company-docs
       env:
         GITHUB_TOKEN: ${{ github.token }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
         DOCS_PR_URL: ${{ env.DOCS_PR_URL }}
-        BREAKING_CHANGES_PATH: /tmp/docs-sync/breaking-changes.json
+        SYNC_DIR: ${{ github.workspace }}/.docs-sync
+        BREAKING_CHANGES_PATH: ${{ github.workspace }}/.docs-sync/breaking-changes.json
       run: |
-        npx tsx /tmp/docs-sync/company-docs/.github/actions/docs-sync/scripts/comment.ts
+        npx tsx .github/actions/docs-sync/scripts/comment.ts

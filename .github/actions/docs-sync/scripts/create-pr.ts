@@ -24,7 +24,8 @@ import type { DocFragment } from "../../../../contracts/DocFragment.js"
 // Read environment
 // ---------------------------------------------------------------------------
 
-const fragmentsPath = process.env.FRAGMENTS_PATH ?? "/tmp/docs-sync/fragments.json"
+const SYNC_DIR = process.env.SYNC_DIR ?? "/tmp/docs-sync"
+const fragmentsPath = process.env.FRAGMENTS_PATH ?? join(SYNC_DIR, "fragments.json")
 const serviceName = process.env.SERVICE_NAME ?? "unknown"
 const prNumber = process.env.PR_NUMBER ?? "0"
 const sourceRepo = process.env.SOURCE_REPO ?? "unknown/unknown"
@@ -33,7 +34,7 @@ const docsRepo = process.env.DOCS_REPO ?? "elmersson/company-docs"
 const token = process.env.GITHUB_TOKEN!
 
 const branch = `docs/${serviceName}/pr-${prNumber}`
-const docsDir = "/tmp/docs-sync/company-docs"
+const docsDir = process.env.DOCS_DIR ?? join(SYNC_DIR, "company-docs")
 
 // ---------------------------------------------------------------------------
 // Read fragments
@@ -55,7 +56,7 @@ if (fragments.length === 0) {
 // Read breaking changes (for PR body)
 // ---------------------------------------------------------------------------
 
-const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? "/tmp/docs-sync/breaking-changes.json"
+const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? join(SYNC_DIR, "breaking-changes.json")
 
 const breakingChanges: { type: string; entity: string; field?: string; details: string; severity: string; affectedConsumers?: string[] }[] =
   existsSync(breakingChangesPath)

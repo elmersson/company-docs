@@ -41,8 +41,9 @@ const MAX_RETRIES = 3
 // Read inputs
 // ---------------------------------------------------------------------------
 
-const changesetPath = process.env.CHANGESET_PATH ?? "/tmp/docs-sync/changeset.json"
-const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? "/tmp/docs-sync/breaking-changes.json"
+const SYNC_DIR = process.env.SYNC_DIR ?? "/tmp/docs-sync"
+const changesetPath = process.env.CHANGESET_PATH ?? join(SYNC_DIR, "changeset.json")
+const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? join(SYNC_DIR, "breaking-changes.json")
 const serviceName = process.env.SERVICE_NAME ?? "unknown"
 
 if (!existsSync(changesetPath)) {
@@ -496,11 +497,9 @@ const validFragments = fragments.filter((f) => {
   return valid
 })
 
-writeFileSync(
-  "/tmp/docs-sync/fragments.json",
-  JSON.stringify(validFragments, null, 2),
-)
+const fragmentsOutPath = join(SYNC_DIR, "fragments.json")
+writeFileSync(fragmentsOutPath, JSON.stringify(validFragments, null, 2))
 
 console.log(
-  `Generated ${validFragments.length} documentation fragment(s) -> /tmp/docs-sync/fragments.json`,
+  `Generated ${validFragments.length} documentation fragment(s) -> ${fragmentsOutPath}`,
 )
