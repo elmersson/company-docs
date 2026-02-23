@@ -1,0 +1,47 @@
+<article>
+  <h2 class="model-title">
+    HealthCheckDto 
+    <span class="badge-new">New</span>
+  </h2>
+  
+  <section>
+    <p>Health check response data transfer object containing service status and metadata.</p>
+    
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>status</td>
+          <td><code>ServiceStatus</code></td>
+          <td>Yes</td>
+          <td>Current operational status of the service</td>
+        </tr>
+        <tr>
+          <td>timestamp</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>ISO timestamp when the health check was performed</td>
+        </tr>
+        <tr>
+          <td>version</td>
+          <td><code>string | undefined</code></td>
+          <td>No</td>
+          <td>Service version information</td>
+        </tr>
+        <tr>
+          <td>uptime</td>
+          <td><code>number | undefined</code></td>
+          <td>No</td>
+          <td>Service uptime in seconds</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

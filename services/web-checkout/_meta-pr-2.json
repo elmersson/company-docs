@@ -1,0 +1,12 @@
+[
+  {
+    "service": "web-checkout",
+    "docType": "model",
+    "entity": "HealthCheckDto",
+    "outputPath": "web-checkout/models/health-check-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T17:15:54.264Z",
+    "sourceRepo": "elmersson/web-checkout",
+    "sourcePr": 2
+  }
+]
