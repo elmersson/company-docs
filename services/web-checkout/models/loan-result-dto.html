@@ -1,0 +1,56 @@
+<article>
+  <header>
+    <h2 class="model-title">
+      LoanResultDto 
+      <span class="badge-new">New</span>
+    </h2>
+    <p><strong>Service:</strong> web-checkout</p>
+  </header>
+  
+  <section>
+    <p>Represents the result of a loan application process, containing approval status and loan terms.</p>
+    
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>approved</td>
+          <td><code>boolean</code></td>
+          <td>Yes</td>
+          <td>Whether the loan application was approved</td>
+        </tr>
+        <tr>
+          <td>loanId</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Unique identifier for the loan</td>
+        </tr>
+        <tr>
+          <td>interestRate</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Annual interest rate for the loan</td>
+        </tr>
+        <tr>
+          <td>monthlyPayment</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Monthly payment amount for the loan</td>
+        </tr>
+        <tr>
+          <td>rejectionReason</td>
+          <td><code>string | undefined</code></td>
+          <td>No</td>
+          <td>Reason for loan rejection, if applicable</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>
