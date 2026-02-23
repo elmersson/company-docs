@@ -1,4 +1,5 @@
 import { Project, SyntaxKind, type CallExpression, type Node } from "ts-morph"
+import { existsSync } from "fs"
 import type { RouteChange } from "../types.js"
 
 const HTTP_METHODS = ["get", "post", "put", "patch", "delete"] as const
@@ -14,8 +15,9 @@ export function extractExpressRoutes(
   projectPath: string,
   entryPoints: string[],
 ): RouteChange[] {
+  const tsConfigPath = `${projectPath}/tsconfig.json`
   const project = new Project({
-    tsConfigFilePath: `${projectPath}/tsconfig.json`,
+    ...(existsSync(tsConfigPath) ? { tsConfigFilePath: tsConfigPath } : {}),
     skipAddingFilesFromTsConfig: true,
     skipFileDependencyResolution: true,
   })
