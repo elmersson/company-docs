@@ -8,21 +8,45 @@
     <p class="consumes-badge">Consumes: <a href="/company-docs/loan-api/api/get-loans">loan-api</a></p>
   </header>
 
-  <section>
-    <p>Fetches the list of loans for the current user. Used on the loan dashboard page to display active and past loans.</p>
+  <section class="screen-info">
+    <h3>Screen</h3>
+    <table>
+      <tbody>
+        <tr><td><strong>Page</strong></td><td>Loan Dashboard (<code>/dashboard/loans</code>)</td></tr>
+        <tr><td><strong>Component</strong></td><td><code>LoanListPage</code> &rarr; <code>LoanTable</code></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>Page load &mdash; called on mount and on pull-to-refresh</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <section>
+  <section class="endpoint-description">
+    <h3>Description</h3>
+    <p>Fetches the full list of loans for the authenticated user. The response populates the main loan dashboard table where users can see all their active, pending, and completed loans.</p>
+  </section>
+
+  <section class="frontend-logic">
+    <h3>Frontend Logic</h3>
+    <ul>
+      <li><strong>Loading state:</strong> Shows a skeleton table with 5 placeholder rows while the request is in flight</li>
+      <li><strong>Empty state:</strong> If the response array is empty, renders a <code>NoLoansIllustration</code> with a CTA to apply for a new loan</li>
+      <li><strong>Sorting:</strong> Client-side sorting by <code>createdAt</code> (newest first) applied after fetch; user can toggle column sort</li>
+      <li><strong>Filtering:</strong> Client-side status filter tabs (All / Active / Completed / Rejected) computed from the response</li>
+      <li><strong>Caching:</strong> Response is cached in the <code>loanStore</code> (Zustand) and revalidated on window focus via <code>useSWR</code></li>
+      <li><strong>Error handling:</strong> On 401, redirects to login; on 5xx, shows a toast notification with retry button</li>
+    </ul>
+  </section>
+
+  <section class="request-details">
     <h3>Request</h3>
-    <p>No request body. Requires authentication header.</p>
+    <p>No request body. Requires <code>Authorization: Bearer &lt;token&gt;</code> header (injected by the API client interceptor).</p>
   </section>
 
-  <section>
+  <section class="response-details">
     <h3>Response</h3>
-    <p>Returns an array of <code>LoanDetailDto</code> objects.</p>
+    <p>Returns an array of <code>LoanDetailDto</code> objects. The frontend maps these to <code>LoanRow</code> view models for table rendering.</p>
   </section>
 
   <footer class="endpoint-meta">
-    <small>Called from: <code>src/api/loan.api.ts</code></small>
+    <small>Called from: <code>src/api/loan.api.ts</code> &middot; Used by: <code>src/pages/dashboard/LoanListPage.tsx</code></small>
   </footer>
 </article>

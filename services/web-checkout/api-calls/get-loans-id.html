@@ -8,28 +8,51 @@
     <p class="consumes-badge">Consumes: <a href="/company-docs/loan-api/api/get-loans-id">loan-api</a></p>
   </header>
 
-  <section>
-    <p>Fetches detailed information for a specific loan. Used on the loan detail page to show full loan status, terms, and payment history.</p>
+  <section class="screen-info">
+    <h3>Screen</h3>
+    <table>
+      <tbody>
+        <tr><td><strong>Page</strong></td><td>Loan Detail (<code>/dashboard/loans/:id</code>)</td></tr>
+        <tr><td><strong>Component</strong></td><td><code>LoanDetailPage</code> &rarr; <code>LoanSummaryCard</code>, <code>LoanTermsPanel</code>, <code>PaymentSchedule</code></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>Page load &mdash; called when navigating from the loan list or via direct URL</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <section>
+  <section class="endpoint-description">
+    <h3>Description</h3>
+    <p>Fetches the full detail view for a single loan. This is the primary data source for the loan detail page, which renders the loan summary card, terms breakdown, repayment schedule, and the payment history tab.</p>
+  </section>
+
+  <section class="frontend-logic">
+    <h3>Frontend Logic</h3>
+    <ul>
+      <li><strong>Loading state:</strong> Renders a full-page skeleton with placeholder cards for summary, terms, and schedule sections</li>
+      <li><strong>Optimistic navigation:</strong> If the loan was already fetched in the list view, the cached <code>LoanDetailDto</code> from <code>loanStore</code> is shown immediately while a background revalidation runs</li>
+      <li><strong>Status-dependent UI:</strong> The page conditionally renders an "Edit Loan" button (status <code>pending</code>), a "Make Payment" button (status <code>active</code>), or a completion badge (status <code>completed</code>)</li>
+      <li><strong>Polling:</strong> When loan status is <code>pending</code>, the page polls this endpoint every 10 seconds to detect approval/rejection updates</li>
+      <li><strong>Error handling:</strong> On 404 (loan not found), redirects to the dashboard with a "Loan not found" toast; on 403, shows an access-denied page</li>
+    </ul>
+  </section>
+
+  <section class="request-details">
     <h3>Request</h3>
     <table>
       <thead>
         <tr><th>Parameter</th><th>Location</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>id</code></td><td>Path</td><td>The loan identifier</td></tr>
+        <tr><td><code>id</code></td><td>Path</td><td>The loan identifier, extracted from the route param</td></tr>
       </tbody>
     </table>
   </section>
 
-  <section>
+  <section class="response-details">
     <h3>Response</h3>
-    <p>Returns a <code>LoanDetailDto</code> with full loan details.</p>
+    <p>Returns a <code>LoanDetailDto</code> with full loan details including status, terms, amount, purpose, and creation date. The frontend maps <code>status</code> to a color-coded badge via <code>getLoanStatusConfig()</code>.</p>
   </section>
 
   <footer class="endpoint-meta">
-    <small>Called from: <code>src/api/loan.api.ts</code></small>
+    <small>Called from: <code>src/api/loan.api.ts</code> &middot; Used by: <code>src/pages/dashboard/LoanDetailPage.tsx</code></small>
   </footer>
 </article>

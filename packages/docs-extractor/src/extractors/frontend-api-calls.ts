@@ -1,6 +1,26 @@
-import { Project, SyntaxKind, type CallExpression } from "ts-morph"
+import {
+  Project,
+  SyntaxKind,
+  type CallExpression,
+  type Node,
+} from "ts-morph"
 import { existsSync } from "fs"
 import type { FrontendApiCall } from "../types.js"
+
+// ---------------------------------------------------------------------------
+// Partial result from parse helpers (before enrichment)
+// ---------------------------------------------------------------------------
+
+type ParsedCall = {
+  url: string
+  method: string
+  requestDto?: string
+  responseDto?: string
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
 
 /**
  * Extract frontend API calls (fetch/axios) from a project using static analysis.
@@ -8,6 +28,12 @@ import type { FrontendApiCall } from "../types.js"
  * Detects:
  * - fetch(url, options) calls
  * - axios.METHOD(url) / api.METHOD(url) calls
+ *
+ * Enriches each call with:
+ * - requestDto (type of the body argument)
+ * - sourceLine
+ * - callerFunction (enclosing function/method name)
+ * - errorHandling (try-catch / .catch() / none)
  */
 export function extractFrontendApiCalls(
   projectPath: string,
@@ -38,14 +64,14 @@ export function extractFrontendApiCalls(
       // Detect fetch() calls
       const fetchCall = tryParseFetchCall(call)
       if (fetchCall) {
-        apiCalls.push({ ...fetchCall, sourceFile: relativePath } as FrontendApiCall)
+        apiCalls.push(enrichCall(fetchCall, call, relativePath))
         continue
       }
 
       // Detect axios calls
       const axiosCall = tryParseAxiosCall(call)
       if (axiosCall) {
-        apiCalls.push({ ...axiosCall, sourceFile: relativePath } as FrontendApiCall)
+        apiCalls.push(enrichCall(axiosCall, call, relativePath))
       }
     }
   }
@@ -53,9 +79,113 @@ export function extractFrontendApiCalls(
   return apiCalls
 }
 
-function tryParseFetchCall(
+// ---------------------------------------------------------------------------
+// Enrichment — shared for both fetch and axios calls
+// ---------------------------------------------------------------------------
+
+/**
+ * Add contextual metadata to a parsed API call.
+ */
+function enrichCall(
+  parsed: ParsedCall,
   call: CallExpression,
-): Omit<FrontendApiCall, "sourceFile"> | null {
+  sourceFile: string,
+): FrontendApiCall {
+  return {
+    ...parsed,
+    sourceFile,
+    sourceLine: call.getStartLineNumber(),
+    callerFunction: findCallerFunction(call),
+    errorHandling: detectErrorHandling(call),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Caller function detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Walk up the AST to find the nearest enclosing named function, method, or
+ * arrow-function variable declaration.
+ */
+function findCallerFunction(node: Node): string | undefined {
+  let current = node.getParent()
+  while (current) {
+    const kind = current.getKind()
+
+    // Named function declaration: function applyForLoan() { ... }
+    if (kind === SyntaxKind.FunctionDeclaration) {
+      const name = current.asKindOrThrow(SyntaxKind.FunctionDeclaration).getName()
+      if (name) return name
+    }
+
+    // Method declaration: class Foo { applyForLoan() { ... } }
+    if (kind === SyntaxKind.MethodDeclaration) {
+      return current.asKindOrThrow(SyntaxKind.MethodDeclaration).getName()
+    }
+
+    // Arrow function assigned to a const: const applyForLoan = async () => { ... }
+    if (kind === SyntaxKind.ArrowFunction || kind === SyntaxKind.FunctionExpression) {
+      const parent = current.getParent()
+      if (parent?.getKind() === SyntaxKind.VariableDeclaration) {
+        return parent.asKindOrThrow(SyntaxKind.VariableDeclaration).getName()
+      }
+    }
+
+    current = current.getParent()
+  }
+  return undefined
+}
+
+// ---------------------------------------------------------------------------
+// Error handling detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Detect the error handling strategy around an API call.
+ */
+function detectErrorHandling(
+  call: CallExpression,
+): "try-catch" | "catch-chain" | "none" {
+  // Check for .catch() chained on the call or its await parent
+  const parent = call.getParent()
+  if (parent?.getKind() === SyntaxKind.PropertyAccessExpression) {
+    const propAccess = parent.asKindOrThrow(SyntaxKind.PropertyAccessExpression)
+    if (propAccess.getName() === "catch") return "catch-chain"
+  }
+
+  // Also check: someCall().then(...).catch(...)
+  const grandparent = parent?.getParent()
+  if (grandparent?.getKind() === SyntaxKind.PropertyAccessExpression) {
+    const propAccess = grandparent.asKindOrThrow(SyntaxKind.PropertyAccessExpression)
+    if (propAccess.getName() === "catch") return "catch-chain"
+  }
+
+  // Check for enclosing try-catch
+  let current = call.getParent()
+  while (current) {
+    if (current.getKind() === SyntaxKind.TryStatement) return "try-catch"
+    // Stop at function boundaries
+    const kind = current.getKind()
+    if (
+      kind === SyntaxKind.FunctionDeclaration ||
+      kind === SyntaxKind.ArrowFunction ||
+      kind === SyntaxKind.FunctionExpression ||
+      kind === SyntaxKind.MethodDeclaration
+    ) {
+      break
+    }
+    current = current.getParent()
+  }
+
+  return "none"
+}
+
+// ---------------------------------------------------------------------------
+// fetch() parser
+// ---------------------------------------------------------------------------
+
+function tryParseFetchCall(call: CallExpression): ParsedCall | null {
   const expr = call.getExpression()
   if (expr.getText() !== "fetch") return null
 
@@ -68,14 +198,17 @@ function tryParseFetchCall(
 
   const url = urlArg.asKindOrThrow(SyntaxKind.StringLiteral).getLiteralValue()
 
-  // Extract method from options object (defaults to GET)
+  // Extract method and requestDto from options object
   let method = "GET"
+  let requestDto: string | undefined
   if (args.length > 1) {
     const options = args[1]
     if (options.getKind() === SyntaxKind.ObjectLiteralExpression) {
       const objLiteral = options.asKindOrThrow(
         SyntaxKind.ObjectLiteralExpression,
       )
+
+      // Method
       const methodProp = objLiteral.getProperty("method")
       if (methodProp && methodProp.getKind() === SyntaxKind.PropertyAssignment) {
         const init = methodProp
@@ -88,15 +221,28 @@ function tryParseFetchCall(
             .toUpperCase()
         }
       }
+
+      // Body — try to resolve the type of the body property value
+      const bodyProp = objLiteral.getProperty("body")
+      if (bodyProp && bodyProp.getKind() === SyntaxKind.PropertyAssignment) {
+        const init = bodyProp
+          .asKindOrThrow(SyntaxKind.PropertyAssignment)
+          .getInitializer()
+        if (init) {
+          requestDto = tryResolveTypeName(init)
+        }
+      }
     }
   }
 
-  return { url, method }
+  return { url, method, requestDto }
 }
 
-function tryParseAxiosCall(
-  call: CallExpression,
-): Omit<FrontendApiCall, "sourceFile"> | null {
+// ---------------------------------------------------------------------------
+// axios-style parser
+// ---------------------------------------------------------------------------
+
+function tryParseAxiosCall(call: CallExpression): ParsedCall | null {
   const expr = call.getExpression()
   const text = expr.getText()
 
@@ -118,5 +264,51 @@ function tryParseAxiosCall(
   const typeArgs = call.getTypeArguments()
   const responseDto = typeArgs.length > 0 ? typeArgs[0].getText() : undefined
 
-  return { url, method, responseDto }
+  // Try to resolve request body type from second argument
+  let requestDto: string | undefined
+  if (args.length > 1) {
+    requestDto = tryResolveTypeName(args[1])
+  }
+
+  return { url, method, responseDto, requestDto }
+}
+
+// ---------------------------------------------------------------------------
+// Type resolution helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Try to resolve a meaningful type name from an expression node.
+ *
+ * For a variable like `data: LoanApplicationDto`, resolves "LoanApplicationDto".
+ * Strips wrapper types like `Promise<>`, and ignores primitives / anonymous types.
+ */
+function tryResolveTypeName(node: Node): string | undefined {
+  try {
+    const type = node.getType()
+    const text = type.getText()
+
+    // Skip unhelpful types
+    if (!text || text === "any" || text === "unknown" || text === "never") {
+      return undefined
+    }
+
+    // If the type is an interface/type alias, getText() returns the name directly
+    // If it includes import paths like `import("...").LoanApplicationDto`,
+    // extract just the type name
+    const importMatch = text.match(/import\([^)]+\)\.(\w+)$/)
+    if (importMatch) return importMatch[1]
+
+    // Skip inline object types and union types — these aren't useful as DTO names
+    if (text.startsWith("{") || text.includes("|")) return undefined
+
+    // Skip primitives
+    if (["string", "number", "boolean", "void", "null", "undefined"].includes(text)) {
+      return undefined
+    }
+
+    return text
+  } catch {
+    return undefined
+  }
 }
