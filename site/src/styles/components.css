@@ -1,0 +1,404 @@
+/* ---------------------------------------------------------------------------
+ * Site Header
+ * --------------------------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.site-logo:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Search Bar
+ * --------------------------------------------------------------------------- */
+
+.search-bar {
+  flex: 0 1 360px;
+  min-width: 180px;
+}
+
+/* Override Pagefind UI defaults */
+.search-bar .pagefind-ui__search-input {
+  border-radius: var(--radius-md) !important;
+  border-color: var(--color-border) !important;
+  font-size: 0.9rem !important;
+}
+
+/* ---------------------------------------------------------------------------
+ * Site Content Area
+ * --------------------------------------------------------------------------- */
+
+.site-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Dashboard / Hero
+ * --------------------------------------------------------------------------- */
+
+.dashboard {
+  padding: 2rem 0;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem 0 2.5rem;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Services Grid (Dashboard)
+ * --------------------------------------------------------------------------- */
+
+.services-section {
+  margin-bottom: 3rem;
+}
+
+.services-section h2,
+.recent-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Service Card
+ * --------------------------------------------------------------------------- */
+
+.service-card {
+  display: block;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  color: var(--color-text);
+}
+
+.service-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-type {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.card-stats .stat {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Doc Page Layout
+ * --------------------------------------------------------------------------- */
+
+.doc-page {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  gap: 2rem;
+  padding: 1.5rem 0 3rem;
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* ---------------------------------------------------------------------------
+ * Doc Sidebar / Service Nav
+ * --------------------------------------------------------------------------- */
+
+.doc-sidebar {
+  position: sticky;
+  top: calc(var(--header-height) + 1rem);
+  align-self: start;
+  max-height: calc(100vh - var(--header-height) - 2rem);
+  overflow-y: auto;
+  padding-right: 1rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.service-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nav-group-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.service-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+}
+
+.nav-link:hover {
+  background: var(--color-surface);
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.nav-link.active:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ---------------------------------------------------------------------------
+ * Doc Content
+ * --------------------------------------------------------------------------- */
+
+.doc-content {
+  max-width: var(--content-max-width);
+  min-width: 0; /* prevent grid blowout */
+}
+
+.doc-breadcrumb {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.doc-breadcrumb a {
+  color: var(--color-text-secondary);
+}
+
+.doc-breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.doc-content > header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.doc-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ---------------------------------------------------------------------------
+ * Doc Type Nav / Tabs
+ * --------------------------------------------------------------------------- */
+
+.doc-type-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1rem;
+}
+
+.doc-type-tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.doc-type-tab:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.doc-type-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Change Timeline
+ * --------------------------------------------------------------------------- */
+
+.change-timeline {
+  margin-top: 0.5rem;
+}
+
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timeline-item {
+  border-left: 2px solid var(--color-border);
+  padding-left: 1rem;
+  margin-left: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: background 0.1s;
+}
+
+.timeline-item a:hover {
+  background: var(--color-surface);
+  text-decoration: none;
+}
+
+.timeline-entity {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.timeline-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeline-date {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Search Results Page
+ * --------------------------------------------------------------------------- */
+
+.search-page {
+  padding: 2rem 0 3rem;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.search-page h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Responsive
+ * --------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .doc-page {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-sidebar {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-right: 0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+}

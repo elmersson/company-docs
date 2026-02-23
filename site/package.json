@@ -1,0 +1,17 @@
+{
+  "name": "@company/docs-site",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site dist",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "glob": "^11.0.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.0.0"
+  }
+}

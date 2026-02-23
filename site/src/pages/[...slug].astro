@@ -1,0 +1,54 @@
+---
+import DocsLayout from "../layouts/DocsLayout.astro"
+import ServiceNav from "../components/ServiceNav.astro"
+import BreakingBadge from "../components/BreakingBadge.astro"
+import { getAllDocPaths, loadServiceNav } from "../utils/docs-loader"
+
+export async function getStaticPaths() {
+  const paths = await getAllDocPaths()
+
+  return paths.map(doc => ({
+    params: { slug: doc.slug },
+    props: { doc },
+  }))
+}
+
+const { doc } = Astro.props
+const nav = await loadServiceNav(doc.service, doc.slug)
+---
+
+<DocsLayout title={`${doc.entity} - ${doc.service}`}>
+  <div class="doc-page">
+    <aside class="doc-sidebar">
+      <ServiceNav items={nav} current={doc.slug} />
+    </aside>
+
+    <article class="doc-content">
+      <header>
+        <div class="doc-breadcrumb">
+          <a href="/">Home</a> /
+          <a href={`/${doc.service}/api`}>{doc.service}</a> /
+          <span>{doc.docType}</span>
+        </div>
+
+        <h1>
+          {doc.entity}
+          {doc.hasBreakingChanges && <BreakingBadge />}
+        </h1>
+
+        <div class="doc-meta">
+          {doc.sourcePrUrl && (
+            <span>
+              Source: <a href={doc.sourcePrUrl}>{doc.sourceRepo} PR #{doc.sourcePr}</a>
+            </span>
+          )}
+          {doc.generatedAt && (
+            <span>Updated: {new Date(doc.generatedAt).toLocaleDateString()}</span>
+          )}
+        </div>
+      </header>
+
+      <div class="doc-body" set:html={doc.html} />
+    </article>
+  </div>
+</DocsLayout>

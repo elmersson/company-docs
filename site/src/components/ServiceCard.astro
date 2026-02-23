@@ -1,0 +1,29 @@
+---
+interface Props {
+  name: string
+  type: string
+  apiCount: number
+  modelCount: number
+  eventCount: number
+  flowCount: number
+  hasBreakingChanges: boolean
+}
+
+const { name, type, apiCount, modelCount, eventCount, flowCount, hasBreakingChanges } = Astro.props
+const totalDocs = apiCount + modelCount + eventCount + flowCount
+---
+
+<a href={`/${name}/api`} class="service-card">
+  <div class="card-header">
+    <h3>{name}</h3>
+    <span class="card-type">{type}</span>
+    {hasBreakingChanges && <span class="badge-breaking">BREAKING</span>}
+  </div>
+  <div class="card-stats">
+    {apiCount > 0 && <span class="stat">{apiCount} API{apiCount !== 1 ? "s" : ""}</span>}
+    {modelCount > 0 && <span class="stat">{modelCount} Model{modelCount !== 1 ? "s" : ""}</span>}
+    {eventCount > 0 && <span class="stat">{eventCount} Event{eventCount !== 1 ? "s" : ""}</span>}
+    {flowCount > 0 && <span class="stat">{flowCount} Flow{flowCount !== 1 ? "s" : ""}</span>}
+    {totalDocs === 0 && <span class="stat muted">No docs yet</span>}
+  </div>
+</a>

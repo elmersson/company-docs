@@ -1,0 +1,23 @@
+---
+import DocsLayout from "../layouts/DocsLayout.astro"
+---
+
+<DocsLayout title="Search">
+  <div class="search-page">
+    <h1>Search Documentation</h1>
+    <div id="search-results"></div>
+    <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+    <script is:inline src="/pagefind/pagefind-ui.js"></script>
+    <script is:inline>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (typeof PagefindUI !== "undefined") {
+          new PagefindUI({
+            element: "#search-results",
+            showSubResults: true,
+            showImages: false,
+          })
+        }
+      })
+    </script>
+  </div>
+</DocsLayout>

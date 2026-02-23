@@ -1,0 +1,45 @@
+---
+import type { NavItem } from "../utils/docs-loader"
+
+interface Props {
+  items: NavItem[]
+  current: string
+}
+
+const { items, current } = Astro.props
+
+// Group by docType
+const grouped = items.reduce<Record<string, NavItem[]>>((acc, item) => {
+  if (!acc[item.docType]) acc[item.docType] = []
+  acc[item.docType].push(item)
+  return acc
+}, {})
+
+const DOC_TYPE_LABELS: Record<string, string> = {
+  api: "API Endpoints",
+  models: "Models & DTOs",
+  events: "Events",
+  flows: "Flows",
+  "breaking-changes": "Breaking Changes",
+}
+---
+
+<nav class="service-nav">
+  {Object.entries(grouped).map(([docType, navItems]) => (
+    <div class="nav-group">
+      <h4 class="nav-group-title">{DOC_TYPE_LABELS[docType] || docType}</h4>
+      <ul>
+        {navItems.map(item => (
+          <li>
+            <a
+              href={item.href}
+              class:list={["nav-link", { active: item.href === `/${current}` }]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</nav>
