@@ -1,4 +1,6 @@
 ---
+import { base } from "../utils/base-path"
+
 interface Props {
   service: string
   current: string
@@ -19,7 +21,7 @@ const tabs = [
 <nav class="doc-type-nav">
   {tabs.map(tab => (
     <a
-      href={`/${service}/${tab.docType}`}
+      href={base(`/${service}/${tab.docType}`)}
       class:list={["doc-type-tab", { active: current === tab.docType }]}
     >
       {tab.label}

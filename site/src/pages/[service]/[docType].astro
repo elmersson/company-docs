@@ -9,6 +9,7 @@ import {
   loadServiceNav,
 } from "../../utils/docs-loader"
 import type { DocListingEntry } from "../../utils/docs-loader"
+import { base } from "../../utils/base-path"
 
 export async function getStaticPaths() {
   const paths = await getOverviewPaths()
@@ -45,7 +46,7 @@ const title = DOC_TYPE_LABELS[docType] || docType
     <article class="doc-content">
       <header>
         <div class="doc-breadcrumb">
-          <a href="/">Home</a> /
+          <a href={base("/")}>Home</a> /
           <span>{service}</span> /
           <span>{docType}</span>
         </div>
@@ -58,7 +59,7 @@ const title = DOC_TYPE_LABELS[docType] || docType
 
       <div class="overview-list">
         {listing.entities.map((entry: DocListingEntry) => (
-          <a href={`/${entry.slug}`} class="overview-item">
+          <a href={base(`/${entry.slug}`)} class="overview-item">
             <div class="overview-item-header">
               <span class="overview-item-name">
                 {entry.entity}

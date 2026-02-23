@@ -1,4 +1,6 @@
 ---
+import { base } from "../utils/base-path"
+
 interface Props {
   name: string
   type: string
@@ -17,7 +19,7 @@ const totalDocs = apiCount + apiCallCount + modelCount + eventCount + flowCount
 const DOC_TYPE_ORDER = ["api", "api-calls", "models", "events", "flows"] as const
 const counts: Record<string, number> = { api: apiCount, "api-calls": apiCallCount, models: modelCount, events: eventCount, flows: flowCount }
 const firstDocType = DOC_TYPE_ORDER.find(dt => counts[dt] > 0) || "api"
-const href = `/${name}/${firstDocType}`
+const href = base(`/${name}/${firstDocType}`)
 ---
 
 <a href={href} class="service-card">

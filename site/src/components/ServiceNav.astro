@@ -1,5 +1,6 @@
 ---
 import type { NavItem } from "../utils/docs-loader"
+import { base } from "../utils/base-path"
 
 interface Props {
   items: NavItem[]
@@ -8,12 +9,17 @@ interface Props {
 
 const { items, current } = Astro.props
 
-// Group by docType
-const grouped = items.reduce<Record<string, NavItem[]>>((acc, item) => {
-  if (!acc[item.docType]) acc[item.docType] = []
-  acc[item.docType].push(item)
-  return acc
-}, {})
+// Group by docType (items arrive pre-sorted from loadServiceNav)
+const grouped: [string, NavItem[]][] = []
+const groupMap = new Map<string, NavItem[]>()
+for (const item of items) {
+  if (!groupMap.has(item.docType)) {
+    const arr: NavItem[] = []
+    groupMap.set(item.docType, arr)
+    grouped.push([item.docType, arr])
+  }
+  groupMap.get(item.docType)!.push(item)
+}
 
 const DOC_TYPE_LABELS: Record<string, string> = {
   api: "API Endpoints",
@@ -23,23 +29,58 @@ const DOC_TYPE_LABELS: Record<string, string> = {
   flows: "Flows",
   "breaking-changes": "Breaking Changes",
 }
+
+const HTTP_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const
+
+/**
+ * For api/api-calls items, parse the HTTP method and path from labels
+ * like "GET /loans" or "POST /loans/apply".
+ */
+function parseEndpointLabel(label: string, docType: string): { method: string | null, path: string } {
+  if (docType !== "api" && docType !== "api-calls") {
+    return { method: null, path: label }
+  }
+  const parts = label.split(" ", 2)
+  if (parts.length === 2 && HTTP_METHODS.includes(parts[0] as typeof HTTP_METHODS[number])) {
+    return { method: parts[0], path: parts[1] }
+  }
+  return { method: null, path: label }
+}
+
+/** Derive the overview page href from the first item in a group. */
+function groupHref(navItems: NavItem[]): string {
+  if (!navItems[0]) return "#"
+  return base(navItems[0].href.split("/").slice(0, 3).join("/"))
+}
 ---
 
 <nav class="service-nav">
-  {Object.entries(grouped).map(([docType, navItems]) => (
+  {grouped.map(([docType, navItems]) => (
     <div class="nav-group">
-      <h4 class="nav-group-title">{DOC_TYPE_LABELS[docType] || docType}</h4>
+      <a href={groupHref(navItems)} class="nav-group-title">
+        {DOC_TYPE_LABELS[docType] || docType}
+      </a>
       <ul>
-        {navItems.map(item => (
-          <li>
-            <a
-              href={item.href}
-              class:list={["nav-link", { active: item.href === `/${current}` }]}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
+        {navItems.map(item => {
+          const { method, path } = parseEndpointLabel(item.label, docType)
+          return (
+            <li>
+              <a
+                href={base(item.href)}
+                class:list={["nav-link", { active: item.href === `/${current}` }]}
+              >
+                {method ? (
+                  <span class="nav-endpoint">
+                    <span class={`nav-method-badge nav-method-${method.toLowerCase()}`}>{method}</span>
+                    <span class="nav-endpoint-path">{path}</span>
+                  </span>
+                ) : (
+                  item.label
+                )}
+              </a>
+            </li>
+          )
+        })}
       </ul>
     </div>
   ))}
