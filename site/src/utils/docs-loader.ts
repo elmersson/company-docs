@@ -221,15 +221,28 @@ export async function loadRecentChanges(
 // Load navigation for a service
 // ---------------------------------------------------------------------------
 
+/** Canonical display order for doc type groups in the sidebar. */
+const DOC_TYPE_ORDER = [
+  "api",
+  "api-calls",
+  "models",
+  "events",
+  "flows",
+  "breaking-changes",
+]
+
 /**
  * Build navigation items for a specific service.
+ *
+ * Items are returned in a stable order: doc type groups follow DOC_TYPE_ORDER,
+ * and items within each group are sorted alphabetically by label.
  */
 export async function loadServiceNav(
   service: string,
   currentSlug: string = "",
 ): Promise<NavItem[]> {
   const all = await getAllDocPaths()
-  return all
+  const items = all
     .filter((d) => d.service === service)
     .map((d) => ({
       label: d.entity,
@@ -237,6 +250,17 @@ export async function loadServiceNav(
       docType: d.docType,
       active: d.slug === currentSlug,
     }))
+
+  items.sort((a, b) => {
+    const aOrder = DOC_TYPE_ORDER.indexOf(a.docType)
+    const bOrder = DOC_TYPE_ORDER.indexOf(b.docType)
+    const aIdx = aOrder === -1 ? DOC_TYPE_ORDER.length : aOrder
+    const bIdx = bOrder === -1 ? DOC_TYPE_ORDER.length : bOrder
+    if (aIdx !== bIdx) return aIdx - bIdx
+    return a.label.localeCompare(b.label)
+  })
+
+  return items
 }
 
 // ---------------------------------------------------------------------------
