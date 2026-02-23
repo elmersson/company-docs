@@ -68,11 +68,22 @@ export type TableChange = {
 // --- Frontend API call types ---
 
 export type FrontendApiCall = {
+  /** URL being called (e.g. "/api/loan/apply") */
   url: string
+  /** HTTP method */
   method: string
+  /** Request DTO type name (if detected from body argument) */
   requestDto?: string
+  /** Response DTO type name (if detected from generic type arg) */
   responseDto?: string
+  /** File where this call is made */
   sourceFile: string
+  /** Line number of the call expression */
+  sourceLine: number
+  /** Name of the enclosing function that wraps this call */
+  callerFunction?: string
+  /** Error handling strategy detected around the call */
+  errorHandling?: "try-catch" | "catch-chain" | "none"
 }
 
 // --- Main StructuredChangeSet ---

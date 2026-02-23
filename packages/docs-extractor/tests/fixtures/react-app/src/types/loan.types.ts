@@ -9,3 +9,16 @@ export interface LoanResultDto {
   loanId: string
   interestRate?: number
 }
+
+export interface UpdateLoanDto {
+  amount?: number
+  term?: number
+  purpose?: string
+}
+
+export interface LoanDetailDto {
+  id: string
+  amount: number
+  status: "pending" | "active" | "completed" | "rejected"
+  createdAt: string
+}

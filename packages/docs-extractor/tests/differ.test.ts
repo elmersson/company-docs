@@ -884,6 +884,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           url: "/api/loan/apply",
           requestDto: "LoanApplicationDto",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 15,
         },
       ],
     }
@@ -903,6 +904,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           method: "DELETE",
           url: "/api/loan/:id",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 24,
         },
       ],
     }
@@ -927,6 +929,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           url: "/api/loan/apply",
           requestDto: "LoanApplicationDto",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 15,
         },
       ],
     }
@@ -938,6 +941,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           url: "/api/loan/apply",
           requestDto: "LoanApplicationDtoV2",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 15,
         },
       ],
     }
@@ -958,6 +962,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           method: "GET",
           url: "/api/loan/status/:id",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 19,
         },
       ],
     }
@@ -976,6 +981,7 @@ describe("diffExtractions – frontendApiCalls", () => {
           method: "GET",
           url: "/api/loan/status/:id",
           sourceFile: "src/api/loan.api.ts",
+          sourceLine: 19,
         },
       ],
     }

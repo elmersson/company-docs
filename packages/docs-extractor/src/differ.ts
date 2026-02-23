@@ -255,7 +255,9 @@ function diffApiCalls(
     if (!baseCall) return false
     return (
       c.requestDto !== baseCall.requestDto ||
-      c.responseDto !== baseCall.responseDto
+      c.responseDto !== baseCall.responseDto ||
+      c.callerFunction !== baseCall.callerFunction ||
+      c.errorHandling !== baseCall.errorHandling
     )
   })
 

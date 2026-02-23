@@ -61,4 +61,71 @@ describe("Frontend API Call Extractor", () => {
     ])
     expect(calls).toHaveLength(0)
   })
+
+  // --- New enrichment tests ---
+
+  it("captures sourceLine for each call", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    for (const call of calls) {
+      expect(call.sourceLine).toBeGreaterThan(0)
+    }
+
+    const postCall = calls.find((c) => c.method === "POST" && c.url === "/loan/apply")
+    expect(postCall!.sourceLine).toBe(16)
+  })
+
+  it("captures callerFunction for function declarations", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    const postCall = calls.find((c) => c.method === "POST" && c.url === "/loan/apply")
+    expect(postCall!.callerFunction).toBe("applyForLoan")
+
+    const deleteCall = calls.find((c) => c.method === "DELETE")
+    expect(deleteCall!.callerFunction).toBe("deleteLoan")
+  })
+
+  it("captures callerFunction for arrow function variables", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    const getListCall = calls.find((c) => c.method === "GET" && c.url === "/loan/list")
+    expect(getListCall).toBeDefined()
+    expect(getListCall!.callerFunction).toBe("fetchLoanList")
+  })
+
+  it("detects requestDto from axios second argument type", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    const postCall = calls.find((c) => c.method === "POST" && c.url === "/loan/apply")
+    expect(postCall!.requestDto).toBe("LoanApplicationDto")
+  })
+
+  it("detects try-catch error handling", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    const updateCall = calls.find((c) => c.method === "PUT" && c.url === "/loan/update")
+    expect(updateCall).toBeDefined()
+    expect(updateCall!.errorHandling).toBe("try-catch")
+    expect(updateCall!.callerFunction).toBe("updateLoan")
+    expect(updateCall!.requestDto).toBe("UpdateLoanDto")
+  })
+
+  it("reports 'none' when no error handling is present", () => {
+    const calls = extractFrontendApiCalls(FIXTURE_PATH, [
+      "src/api/loan.api.ts",
+    ])
+
+    const postCall = calls.find((c) => c.method === "POST" && c.url === "/loan/apply")
+    expect(postCall!.errorHandling).toBe("none")
+  })
 })
