@@ -8,29 +8,54 @@
     <p class="consumes-badge">Consumes: <a href="/company-docs/loan-api/api/post-loans-loanId-payments">loan-api</a></p>
   </header>
 
-  <section>
-    <p>Submits a payment for a specific loan. Called from the payment form when the user initiates a loan payment.</p>
+  <section class="screen-info">
+    <h3>Screen</h3>
+    <table>
+      <tbody>
+        <tr><td><strong>Page</strong></td><td>Loan Detail &mdash; Payments Tab (<code>/dashboard/loans/:loanId</code>)</td></tr>
+        <tr><td><strong>Component</strong></td><td><code>LoanDetailPage</code> &rarr; <code>PaymentsTab</code> &rarr; <code>MakePaymentModal</code></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>User click &mdash; fires when the user fills in the payment amount and clicks &ldquo;Submit Payment&rdquo; in the modal</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <section>
+  <section class="endpoint-description">
+    <h3>Description</h3>
+    <p>Submits a payment for a specific loan. The &ldquo;Make Payment&rdquo; button is only visible when the loan status is <code>active</code>. Opens a modal where the user enters the payment amount, which defaults to the next scheduled installment amount.</p>
+  </section>
+
+  <section class="frontend-logic">
+    <h3>Frontend Logic</h3>
+    <ul>
+      <li><strong>Default amount:</strong> Pre-fills the payment amount field with the next scheduled installment from the loan&rsquo;s repayment schedule</li>
+      <li><strong>Validation:</strong> Amount must be positive and cannot exceed the remaining loan balance; validated client-side before submission</li>
+      <li><strong>Confirmation step:</strong> After filling in the amount, a confirmation dialog shows the payment summary before the actual API call fires</li>
+      <li><strong>Success flow:</strong> On 201, closes the modal, shows a &ldquo;Payment submitted&rdquo; success toast, and refetches the payment history list</li>
+      <li><strong>Error handling:</strong> On 400 (invalid amount), shows inline form error; on 409 (payment already processing), shows an alert to wait; on 5xx, shows a retry dialog with the payment details preserved</li>
+      <li><strong>Optimistic list update:</strong> The new payment is prepended to the payment history list with a &ldquo;Processing&rdquo; badge while the background refetch confirms it</li>
+    </ul>
+  </section>
+
+  <section class="request-details">
     <h3>Request</h3>
-    <p>Sends a <code>CreatePaymentDto</code> as the request body.</p>
+    <p>Sends a <code>CreatePaymentDto</code> as JSON request body. The <code>loanId</code> is extracted from the route parameter.</p>
     <table>
       <thead>
         <tr><th>Parameter</th><th>Location</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr><td><code>loanId</code></td><td>Path</td><td>The loan identifier</td></tr>
+        <tr><td><code>amount</code></td><td>Body</td><td>Payment amount</td></tr>
       </tbody>
     </table>
   </section>
 
-  <section>
+  <section class="response-details">
     <h3>Response</h3>
-    <p>Returns a <code>PaymentDto</code> confirming the payment.</p>
+    <p>Returns a <code>PaymentDto</code> confirming the payment was accepted. Includes the payment <code>id</code>, <code>status</code> (<code>processing</code> | <code>completed</code>), and <code>createdAt</code> timestamp.</p>
   </section>
 
   <footer class="endpoint-meta">
-    <small>Called from: <code>src/api/payment.api.ts</code></small>
+    <small>Called from: <code>src/api/payment.api.ts</code> &middot; Used by: <code>src/pages/dashboard/LoanDetailPage.tsx</code></small>
   </footer>
 </article>

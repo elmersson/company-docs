@@ -8,12 +8,38 @@
     <p class="consumes-badge">Consumes: <a href="/company-docs/loan-api/api/get-loans-loanId-payments">loan-api</a></p>
   </header>
 
-  <section>
-    <p>Fetches the payment history for a specific loan. Displayed on the loan detail page in the payments tab.</p>
+  <section class="screen-info">
+    <h3>Screen</h3>
+    <table>
+      <tbody>
+        <tr><td><strong>Page</strong></td><td>Loan Detail &mdash; Payments Tab (<code>/dashboard/loans/:loanId</code>)</td></tr>
+        <tr><td><strong>Component</strong></td><td><code>LoanDetailPage</code> &rarr; <code>PaymentsTab</code> &rarr; <code>PaymentHistoryTable</code></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>Tab switch &mdash; called when the user clicks the &ldquo;Payments&rdquo; tab on the loan detail page, and on initial load if the tab is the default</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <section>
+  <section class="endpoint-description">
+    <h3>Description</h3>
+    <p>Fetches the payment history for a specific loan. Displayed as a chronological table in the Payments tab of the loan detail page. Each row shows the payment date, amount, status, and a reference number.</p>
+  </section>
+
+  <section class="frontend-logic">
+    <h3>Frontend Logic</h3>
+    <ul>
+      <li><strong>Lazy loading:</strong> Payment history is only fetched when the Payments tab is activated, not on initial page load &mdash; reduces unnecessary API calls for users who only view loan details</li>
+      <li><strong>Loading state:</strong> Shows a skeleton table with 3 placeholder rows while the request is in flight</li>
+      <li><strong>Empty state:</strong> If no payments exist, renders a &ldquo;No payments yet&rdquo; message with the next scheduled payment date and a &ldquo;Make Payment&rdquo; CTA button</li>
+      <li><strong>Sorting:</strong> Server returns payments newest-first; the frontend allows toggling sort by date or amount via column headers</li>
+      <li><strong>Status badges:</strong> Each payment row shows a color-coded status badge &mdash; green for <code>completed</code>, yellow for <code>processing</code>, red for <code>failed</code></li>
+      <li><strong>Error handling:</strong> On failure, shows an inline error banner within the tab (does not affect the rest of the loan detail page) with a retry button</li>
+      <li><strong>Auto-refresh:</strong> When any payment has <code>processing</code> status, the list polls every 5 seconds until all payments settle</li>
+    </ul>
+  </section>
+
+  <section class="request-details">
     <h3>Request</h3>
+    <p>No request body. The <code>loanId</code> is extracted from the route parameter. Requires <code>Authorization: Bearer &lt;token&gt;</code> header.</p>
     <table>
       <thead>
         <tr><th>Parameter</th><th>Location</th><th>Description</th></tr>
@@ -24,12 +50,12 @@
     </table>
   </section>
 
-  <section>
+  <section class="response-details">
     <h3>Response</h3>
-    <p>Returns an array of <code>PaymentSummaryDto</code> objects.</p>
+    <p>Returns an array of <code>PaymentSummaryDto</code> objects. Each object includes <code>id</code>, <code>amount</code>, <code>status</code>, <code>createdAt</code>, and <code>referenceNumber</code>. The frontend maps <code>status</code> to badge colors via <code>getPaymentStatusConfig()</code>.</p>
   </section>
 
   <footer class="endpoint-meta">
-    <small>Called from: <code>src/api/payment.api.ts</code></small>
+    <small>Called from: <code>src/api/payment.api.ts</code> &middot; Used by: <code>src/pages/dashboard/LoanDetailPage.tsx</code></small>
   </footer>
 </article>
