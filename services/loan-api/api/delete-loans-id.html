@@ -1,0 +1,54 @@
+<article class="endpoint-doc">
+  <h2 class="endpoint-title">
+    <span class="method-badge method-delete">DELETE</span>
+    /loans/:id
+    <span class="badge-new">New</span>
+  </h2>
+
+  <section class="endpoint-description">
+    <p>Delete a specific loan by ID.</p>
+  </section>
+
+  <section class="authentication">
+    <h3>Authentication</h3>
+    <p>🔒 Requires authentication</p>
+  </section>
+
+  <section class="parameters">
+    <h3>Path Parameters</h3>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>The unique identifier of the loan to delete</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="response">
+    <h3>Response</h3>
+    <p><strong>204 No Content</strong> - Loan successfully deleted</p>
+    <p><strong>401 Unauthorized</strong> - Authentication required</p>
+    <p><strong>404 Not Found</strong> - Loan not found</p>
+    <p><strong>403 Forbidden</strong> - Insufficient permissions</p>
+  </section>
+
+  <section class="example">
+    <h3>Example Request</h3>
+    <div class="example-block">
+      <pre><code>DELETE /loans/loan_123456789
+Authorization: Bearer your-jwt-token</code></pre>
+    </div>
+  </section>
+</article>

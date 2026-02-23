@@ -1,0 +1,202 @@
+[
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "GET /health",
+    "outputPath": "loan-api/api/get-health.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:36.618Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "GET /loans",
+    "outputPath": "loan-api/api/get-loans.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:37.764Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "POST /loans/apply",
+    "outputPath": "loan-api/api/post-loans-apply.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:39.195Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "PUT /loans/:id",
+    "outputPath": "loan-api/api/put-loans-id.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:40.683Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "GET /loans/:id",
+    "outputPath": "loan-api/api/get-loans-id.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:38.332Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "DELETE /loans/:id",
+    "outputPath": "loan-api/api/delete-loans-id.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:48.081Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "POST /loans/:loanId/payments",
+    "outputPath": "loan-api/api/post-loans-loanId-payments.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:46.601Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "GET /loans/:loanId/payments",
+    "outputPath": "loan-api/api/get-loans-loanId-payments.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:47.203Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "api",
+    "entity": "GET /loans/:loanId/payments/:paymentId",
+    "outputPath": "loan-api/api/get-loans-loanId-payments-paymentId.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:47.270Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "LoanApplicationDto",
+    "outputPath": "loan-api/models/loan-application-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:54.427Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "LoanDetailDto",
+    "outputPath": "loan-api/models/loan-detail-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:55.625Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "UpdateLoanDto",
+    "outputPath": "loan-api/models/update-loan-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:53.762Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "LoanResultDto",
+    "outputPath": "loan-api/models/loan-result-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:53.888Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "CreatePaymentDto",
+    "outputPath": "loan-api/models/create-payment-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:34:52.200Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "PaymentDto",
+    "outputPath": "loan-api/models/payment-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:01.703Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "model",
+    "entity": "PaymentSummaryDto",
+    "outputPath": "loan-api/models/payment-summary-dto.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:00.024Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "event",
+    "entity": "LoanCreatedEvent",
+    "outputPath": "loan-api/events/loan-created-event.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:05.285Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "event",
+    "entity": "LoanApprovedEvent",
+    "outputPath": "loan-api/events/loan-approved-event.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:05.586Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "event",
+    "entity": "LoanRejectedEvent",
+    "outputPath": "loan-api/events/loan-rejected-event.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:05.732Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  },
+  {
+    "service": "loan-api",
+    "docType": "event",
+    "entity": "payment.received",
+    "outputPath": "loan-api/events/payment.received.html",
+    "hasBreakingChanges": false,
+    "generatedAt": "2026-02-23T06:35:06.279Z",
+    "sourceRepo": "elmersson/loan-api",
+    "sourcePr": 1
+  }
+]

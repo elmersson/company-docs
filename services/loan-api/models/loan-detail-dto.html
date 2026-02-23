@@ -1,0 +1,83 @@
+<article>
+  <h2 class="model-title">
+    LoanDetailDto
+    <span class="badge-new">New</span>
+  </h2>
+  
+  <section>
+    <p>Detailed loan information including applicant details and loan terms.</p>
+    
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>id</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Unique identifier for the loan</td>
+        </tr>
+        <tr>
+          <td>amount</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Principal loan amount</td>
+        </tr>
+        <tr>
+          <td>termMonths</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Loan term duration in months</td>
+        </tr>
+        <tr>
+          <td>interestRate</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Annual interest rate percentage</td>
+        </tr>
+        <tr>
+          <td>status</td>
+          <td><code>LoanStatus</code></td>
+          <td>Yes</td>
+          <td>Current status of the loan</td>
+        </tr>
+        <tr>
+          <td>applicantName</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Full name of the loan applicant</td>
+        </tr>
+        <tr>
+          <td>applicantEmail</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Email address of the applicant</td>
+        </tr>
+        <tr>
+          <td>employmentStatus</td>
+          <td><code>EmploymentStatus</code></td>
+          <td>Yes</td>
+          <td>Applicant's current employment status</td>
+        </tr>
+        <tr>
+          <td>createdAt</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Timestamp when the loan was created</td>
+        </tr>
+        <tr>
+          <td>updatedAt</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Timestamp of the last update</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

@@ -1,0 +1,48 @@
+<article>
+  <header>
+    <h2 class="model-title">
+      UpdateLoanDto
+      <span class="badge-new">New</span>
+    </h2>
+    <p>Data transfer object for updating loan information with optional fields.</p>
+  </header>
+
+  <section>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>amount</td>
+          <td><code>number | undefined</code></td>
+          <td>No</td>
+          <td>The loan amount to update</td>
+        </tr>
+        <tr>
+          <td>termMonths</td>
+          <td><code>number | undefined</code></td>
+          <td>No</td>
+          <td>The loan term duration in months</td>
+        </tr>
+        <tr>
+          <td>employmentStatus</td>
+          <td><code>EmploymentStatus | undefined</code></td>
+          <td>No</td>
+          <td>The borrower's current employment status</td>
+        </tr>
+        <tr>
+          <td>notes</td>
+          <td><code>string | undefined</code></td>
+          <td>No</td>
+          <td>Additional notes or comments about the loan</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>
