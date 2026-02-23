@@ -2,16 +2,18 @@
 interface Props {
   service: string
   current: string
+  availableDocTypes: string[]
 }
 
-const { service, current } = Astro.props
+const { service, current, availableDocTypes } = Astro.props
 
 const tabs = [
-  { label: "API", docType: "api" },
+  { label: "API Endpoints", docType: "api" },
+  { label: "API Calls", docType: "api-calls" },
   { label: "Models", docType: "models" },
   { label: "Events", docType: "events" },
   { label: "Flows", docType: "flows" },
-]
+].filter(tab => availableDocTypes.includes(tab.docType))
 ---
 
 <nav class="doc-type-nav">

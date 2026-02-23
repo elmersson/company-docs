@@ -1,0 +1,35 @@
+<article class="api-call-docs">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-get">GET</span>
+      /loans/:loanId/payments
+      <span class="new-badge">New</span>
+    </h2>
+    <p class="consumes-badge">Consumes: <a href="/loan-api/api/get-loans-loanId-payments">loan-api</a></p>
+  </header>
+
+  <section>
+    <p>Fetches the payment history for a specific loan. Displayed on the loan detail page in the payments tab.</p>
+  </section>
+
+  <section>
+    <h3>Request</h3>
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Location</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>loanId</code></td><td>Path</td><td>The loan identifier</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h3>Response</h3>
+    <p>Returns an array of <code>PaymentSummaryDto</code> objects.</p>
+  </section>
+
+  <footer class="endpoint-meta">
+    <small>Called from: <code>src/api/payment.api.ts</code></small>
+  </footer>
+</article>

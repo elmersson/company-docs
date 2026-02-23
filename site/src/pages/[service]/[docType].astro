@@ -1,0 +1,83 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro"
+import ServiceNav from "../../components/ServiceNav.astro"
+import DocTypeNav from "../../components/DocTypeNav.astro"
+import BreakingBadge from "../../components/BreakingBadge.astro"
+import {
+  getOverviewPaths,
+  loadDocTypeListing,
+  loadServiceNav,
+} from "../../utils/docs-loader"
+import type { DocListingEntry } from "../../utils/docs-loader"
+
+export async function getStaticPaths() {
+  const paths = await getOverviewPaths()
+
+  return paths.map((p) => ({
+    params: { service: p.service, docType: p.docType },
+    props: { availableDocTypes: p.availableDocTypes },
+  }))
+}
+
+const { service, docType } = Astro.params as { service: string; docType: string }
+const { availableDocTypes } = Astro.props
+
+const listing = await loadDocTypeListing(service, docType)
+const nav = await loadServiceNav(service)
+
+const DOC_TYPE_LABELS: Record<string, string> = {
+  api: "API Endpoints",
+  "api-calls": "API Calls",
+  models: "Models & DTOs",
+  events: "Events",
+  flows: "Flows",
+}
+
+const title = DOC_TYPE_LABELS[docType] || docType
+---
+
+<DocsLayout title={`${title} - ${service}`}>
+  <div class="doc-page">
+    <aside class="doc-sidebar">
+      <ServiceNav items={nav} current="" />
+    </aside>
+
+    <article class="doc-content">
+      <header>
+        <div class="doc-breadcrumb">
+          <a href="/">Home</a> /
+          <span>{service}</span> /
+          <span>{docType}</span>
+        </div>
+
+        <h1>{title}</h1>
+        <p class="overview-subtitle">{listing.entities.length} documented {listing.entities.length === 1 ? "item" : "items"}</p>
+      </header>
+
+      <DocTypeNav service={service} current={docType} availableDocTypes={availableDocTypes} />
+
+      <div class="overview-list">
+        {listing.entities.map((entry: DocListingEntry) => (
+          <a href={`/${entry.slug}`} class="overview-item">
+            <div class="overview-item-header">
+              <span class="overview-item-name">
+                {entry.entity}
+                {entry.hasBreakingChanges && <BreakingBadge />}
+              </span>
+              {entry.generatedAt && (
+                <span class="overview-item-date">
+                  {new Date(entry.generatedAt).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+            {entry.sourcePrUrl && (
+              <span class="overview-item-source">
+                {entry.sourceRepo} PR #{entry.sourcePr}
+              </span>
+            )}
+          </a>
+        ))}
+      </div>
+    </article>
+  </div>
+</DocsLayout>

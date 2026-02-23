@@ -1,0 +1,28 @@
+<article class="api-call-docs">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-get">GET</span>
+      /loans
+      <span class="new-badge">New</span>
+    </h2>
+    <p class="consumes-badge">Consumes: <a href="/loan-api/api/get-loans">loan-api</a></p>
+  </header>
+
+  <section>
+    <p>Fetches the list of loans for the current user. Used on the loan dashboard page to display active and past loans.</p>
+  </section>
+
+  <section>
+    <h3>Request</h3>
+    <p>No request body. Requires authentication header.</p>
+  </section>
+
+  <section>
+    <h3>Response</h3>
+    <p>Returns an array of <code>LoanDetailDto</code> objects.</p>
+  </section>
+
+  <footer class="endpoint-meta">
+    <small>Called from: <code>src/api/loan.api.ts</code></small>
+  </footer>
+</article>
