@@ -1,0 +1,34 @@
+---
+import type { DocEntry } from "../utils/docs-loader"
+
+interface Props {
+  changes: DocEntry[]
+}
+
+const { changes } = Astro.props
+---
+
+<div class="change-timeline">
+  {changes.length === 0 ? (
+    <p class="muted">No recent changes</p>
+  ) : (
+    <ul class="timeline-list">
+      {changes.map(change => (
+        <li class="timeline-item">
+          <a href={`/${change.slug}`}>
+            <span class="timeline-entity">{change.entity}</span>
+            <span class="timeline-meta">
+              {change.service} / {change.docType}
+              {change.hasBreakingChanges && <span class="badge-breaking">BREAKING</span>}
+            </span>
+            {change.generatedAt && (
+              <time class="timeline-date">
+                {new Date(change.generatedAt).toLocaleDateString()}
+              </time>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>

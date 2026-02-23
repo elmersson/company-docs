@@ -1,0 +1,44 @@
+---
+import DocsLayout from "../layouts/DocsLayout.astro"
+import ServiceCard from "../components/ServiceCard.astro"
+import ChangeTimeline from "../components/ChangeTimeline.astro"
+import { loadAllServices, loadRecentChanges } from "../utils/docs-loader"
+
+const services = await loadAllServices()
+const recentChanges = await loadRecentChanges(10)
+---
+
+<DocsLayout title="Documentation Hub">
+  <main class="dashboard">
+    <section class="hero">
+      <h1>Documentation Hub</h1>
+      <p>Auto-generated documentation from source code. Always up-to-date.</p>
+    </section>
+
+    <section class="services-section">
+      <h2>Services</h2>
+      {services.length === 0 ? (
+        <p class="muted">No services documented yet. Documentation will appear here when PRs are processed.</p>
+      ) : (
+        <div class="services-grid">
+          {services.map(service => (
+            <ServiceCard
+              name={service.name}
+              type={service.type}
+              apiCount={service.apiCount}
+              modelCount={service.modelCount}
+              eventCount={service.eventCount}
+              flowCount={service.flowCount}
+              hasBreakingChanges={service.hasBreakingChanges}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+
+    <section class="recent-section">
+      <h2>Recent Changes</h2>
+      <ChangeTimeline changes={recentChanges} />
+    </section>
+  </main>
+</DocsLayout>

@@ -1,0 +1,123 @@
+/* ---------------------------------------------------------------------------
+ * CSS Variables & Reset
+ * --------------------------------------------------------------------------- */
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f8f9fa;
+  --color-border: #e1e4e8;
+  --color-text: #24292e;
+  --color-text-secondary: #586069;
+  --color-primary: #0366d6;
+  --color-primary-hover: #0250a3;
+  --color-success: #28a745;
+  --color-warning: #f9a825;
+  --color-danger: #d73a49;
+  --color-breaking: #d73a49;
+
+  --sidebar-width: 260px;
+  --content-max-width: 900px;
+  --header-height: 56px;
+
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+ * Breaking Change Badges
+ * --------------------------------------------------------------------------- */
+
+.badge-breaking {
+  display: inline-block;
+  background: var(--color-breaking);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------------------
+ * Method Badges (used inside injected HTML fragments)
+ * --------------------------------------------------------------------------- */
+
+.method-badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.method-get {
+  background: #61affe;
+  color: white;
+}
+.method-post {
+  background: #49cc90;
+  color: white;
+}
+.method-put {
+  background: #fca130;
+  color: white;
+}
+.method-patch {
+  background: #50e3c2;
+  color: white;
+}
+.method-delete {
+  background: #f93e3e;
+  color: white;
+}
+
+/* ---------------------------------------------------------------------------
+ * Utility Classes
+ * --------------------------------------------------------------------------- */
+
+.muted {
+  color: var(--color-text-secondary);
+}

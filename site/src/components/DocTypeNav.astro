@@ -1,0 +1,26 @@
+---
+interface Props {
+  service: string
+  current: string
+}
+
+const { service, current } = Astro.props
+
+const tabs = [
+  { label: "API", docType: "api" },
+  { label: "Models", docType: "models" },
+  { label: "Events", docType: "events" },
+  { label: "Flows", docType: "flows" },
+]
+---
+
+<nav class="doc-type-nav">
+  {tabs.map(tab => (
+    <a
+      href={`/${service}/${tab.docType}`}
+      class:list={["doc-type-tab", { active: current === tab.docType }]}
+    >
+      {tab.label}
+    </a>
+  ))}
+</nav>
