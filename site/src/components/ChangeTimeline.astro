@@ -1,5 +1,6 @@
 ---
 import type { DocEntry } from "../utils/docs-loader"
+import { base } from "../utils/base-path"
 
 interface Props {
   changes: DocEntry[]
@@ -15,7 +16,7 @@ const { changes } = Astro.props
     <ul class="timeline-list">
       {changes.map(change => (
         <li class="timeline-item">
-          <a href={`/${change.slug}`}>
+          <a href={base(`/${change.slug}`)}>
             <span class="timeline-entity">{change.entity}</span>
             <span class="timeline-meta">
               {change.service} / {change.docType}

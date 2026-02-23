@@ -155,7 +155,7 @@ export async function loadAllServices(): Promise<ServiceSummary[]> {
 
   const registry = loadRegistry()
   const serviceDirs = readdirSync(SERVICES_DIR, { withFileTypes: true })
-    .filter((d) => d.isDirectory())
+    .filter((d) => d.isDirectory() && !d.name.startsWith("."))
     .map((d) => d.name)
 
   const summaries: ServiceSummary[] = []

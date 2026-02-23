@@ -3,6 +3,7 @@ import DocsLayout from "../layouts/DocsLayout.astro"
 import ServiceNav from "../components/ServiceNav.astro"
 import BreakingBadge from "../components/BreakingBadge.astro"
 import { getAllDocPaths, loadServiceNav, loadConsumers } from "../utils/docs-loader"
+import { base } from "../utils/base-path"
 
 export async function getStaticPaths() {
   const paths = await getAllDocPaths()
@@ -27,8 +28,8 @@ const consumers = await loadConsumers(doc.slug)
     <article class="doc-content">
       <header>
         <div class="doc-breadcrumb">
-          <a href="/">Home</a> /
-          <a href={`/${doc.service}/${doc.docType}`}>{doc.service}</a> /
+          <a href={base("/")}>Home</a> /
+          <a href={base(`/${doc.service}/${doc.docType}`)}>{doc.service}</a> /
           <span>{doc.docType}</span>
         </div>
 
@@ -55,7 +56,7 @@ const consumers = await loadConsumers(doc.slug)
           <ul class="consumed-by-list">
             {consumers.map(consumer => (
               <li>
-                <a href={`/${consumer.slug}`}>{consumer.service}</a>
+                <a href={base(`/${consumer.slug}`)}>{consumer.service}</a>
               </li>
             ))}
           </ul>

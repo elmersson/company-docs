@@ -1,5 +1,6 @@
 ---
 import type { NavItem } from "../utils/docs-loader"
+import { base } from "../utils/base-path"
 
 interface Props {
   items: NavItem[]
@@ -45,12 +46,18 @@ function parseEndpointLabel(label: string, docType: string): { method: string | 
   }
   return { method: null, path: label }
 }
+
+/** Derive the overview page href from the first item in a group. */
+function groupHref(navItems: NavItem[]): string {
+  if (!navItems[0]) return "#"
+  return base(navItems[0].href.split("/").slice(0, 3).join("/"))
+}
 ---
 
 <nav class="service-nav">
   {grouped.map(([docType, navItems]) => (
     <div class="nav-group">
-      <a href={navItems[0] ? navItems[0].href.split("/").slice(0, 3).join("/") : "#"} class="nav-group-title">
+      <a href={groupHref(navItems)} class="nav-group-title">
         {DOC_TYPE_LABELS[docType] || docType}
       </a>
       <ul>
@@ -59,7 +66,7 @@ function parseEndpointLabel(label: string, docType: string): { method: string | 
           return (
             <li>
               <a
-                href={item.href}
+                href={base(item.href)}
                 class:list={["nav-link", { active: item.href === `/${current}` }]}
               >
                 {method ? (

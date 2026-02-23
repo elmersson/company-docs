@@ -1,11 +1,11 @@
 ---
-// Pagefind search widget — injected after build via pagefind CLI
+import { base } from "../utils/base-path"
 ---
 
 <div class="search-bar">
   <div id="search"></div>
-  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <link href={base("/pagefind/pagefind-ui.css")} rel="stylesheet" />
+  <script is:inline src={base("/pagefind/pagefind-ui.js")}></script>
   <script is:inline>
     window.addEventListener("DOMContentLoaded", () => {
       if (typeof PagefindUI !== "undefined") {
