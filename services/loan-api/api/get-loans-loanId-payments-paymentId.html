@@ -1,0 +1,58 @@
+<article class="endpoint-documentation">
+  <h2 class="endpoint-title">
+    <span class="method-badge method-get">GET</span>
+    /loans/:loanId/payments/:paymentId
+    <span class="new-badge">New</span>
+  </h2>
+  
+  <section class="endpoint-description">
+    <p>Retrieves details for a specific payment within a loan.</p>
+  </section>
+
+  <section class="parameters">
+    <h3>Path Parameters</h3>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>loanId</code></td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>Unique identifier for the loan</td>
+        </tr>
+        <tr>
+          <td><code>paymentId</code></td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>Unique identifier for the payment</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="example-request">
+    <h3>Example Request</h3>
+    <pre class="example-block"><code>GET /loans/loan-123/payments/payment-456
+Host: api.example.com
+Accept: application/json</code></pre>
+  </section>
+
+  <section class="example-response">
+    <h3>Example Response</h3>
+    <pre class="example-block"><code>{
+  "id": "payment-456",
+  "loanId": "loan-123",
+  "amount": 1250.00,
+  "paymentDate": "2024-01-15",
+  "status": "completed",
+  "paymentMethod": "bank_transfer"
+}</code></pre>
+  </section>
+</article>

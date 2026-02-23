@@ -1,0 +1,39 @@
+<article class="endpoint-docs">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-get">GET</span>
+      /loans
+      <span class="new-badge">New</span>
+    </h2>
+  </header>
+
+  <section class="endpoint-description">
+    <p>Retrieves a list of all loans in the system.</p>
+  </section>
+
+  <section class="request-details">
+    <h3>Request</h3>
+    <p>No request body required.</p>
+  </section>
+
+  <section class="response-details">
+    <h3>Response</h3>
+    <p>Returns an array of loan objects.</p>
+    
+    <div class="example-block">
+      <h4>Example Response</h4>
+      <pre><code>[
+  {
+    "id": "12345",
+    "amount": 50000,
+    "status": "active",
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+]</code></pre>
+    </div>
+  </section>
+
+  <footer class="endpoint-meta">
+    <small>Defined in: <code>src/routes/loan.routes.ts:11</code></small>
+  </footer>
+</article>

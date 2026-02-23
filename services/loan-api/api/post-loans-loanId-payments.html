@@ -1,0 +1,50 @@
+<article class="endpoint-doc">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-post">POST</span>
+      /loans/:loanId/payments
+      <span class="badge-new">New</span>
+    </h2>
+  </header>
+
+  <section class="endpoint-details">
+    <p>Create a new payment for a specific loan.</p>
+    
+    <h3>Authentication</h3>
+    <p>🔐 Requires authentication</p>
+
+    <h3>Path Parameters</h3>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>loanId</code></td>
+          <td>string</td>
+          <td>Unique identifier of the loan</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Request</h3>
+    <pre class="example-block"><code>POST /loans/12345/payments
+Authorization: Bearer your-auth-token</code></pre>
+
+    <h3>Response</h3>
+    <p>Returns the created payment record.</p>
+
+    <h3>Example Response</h3>
+    <pre class="example-block"><code>HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "success": true,
+  "message": "Payment created successfully"
+}</code></pre>
+  </section>
+</article>

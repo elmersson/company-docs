@@ -1,0 +1,51 @@
+<article>
+  <header>
+    <h1 class="endpoint-title">
+      <span class="method-badge method-get">GET</span>
+      /loans/:id
+      <span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; margin-left: 8px;">New</span>
+    </h1>
+  </header>
+
+  <section>
+    <h2>Description</h2>
+    <p>Retrieve a specific loan by ID.</p>
+  </section>
+
+  <section>
+    <h2>Path Parameters</h2>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>The unique identifier of the loan</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Example Request</h2>
+    <pre class="example-block"><code>GET /loans/12345</code></pre>
+  </section>
+
+  <section>
+    <h2>Example Response</h2>
+    <pre class="example-block"><code>{
+  "id": "12345",
+  "amount": 50000,
+  "status": "active",
+  "createdAt": "2024-01-15T10:30:00Z"
+}</code></pre>
+  </section>
+</article>

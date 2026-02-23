@@ -1,0 +1,51 @@
+<article>
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-post">POST</span>
+      /loans/apply
+      <span style="background: #22c55e; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; margin-left: 8px;">New</span>
+    </h2>
+  </header>
+
+  <section>
+    <p>Apply for a new loan.</p>
+    
+    <h3>Authentication & Validation</h3>
+    <ul>
+      <li><strong>Authentication required:</strong> Valid bearer token must be provided</li>
+      <li><strong>Request validation:</strong> Request body will be validated against schema</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Request</h3>
+    <p>No request body schema available. Refer to API implementation for required fields.</p>
+  </section>
+
+  <section>
+    <h3>Response</h3>
+    <p>No response body schema available. Refer to API implementation for response structure.</p>
+  </section>
+
+  <section>
+    <h3>Example Request</h3>
+    <pre class="example-block"><code>POST /loans/apply
+Authorization: Bearer your-token-here
+Content-Type: application/json
+
+{
+  "amount": 10000,
+  "purpose": "home improvement",
+  "term": 24
+}</code></pre>
+  </section>
+
+  <section>
+    <h3>Example Response</h3>
+    <pre class="example-block"><code>{
+  "applicationId": "app_12345",
+  "status": "pending",
+  "message": "Loan application submitted successfully"
+}</code></pre>
+  </section>
+</article>

@@ -1,0 +1,62 @@
+<article>
+  <h2 class="model-title">PaymentDto <span class="badge-new">New</span></h2>
+  
+  <section>
+    <p>Data transfer object representing a payment transaction in the loan system.</p>
+    
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>id</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Unique identifier for the payment transaction</td>
+        </tr>
+        <tr>
+          <td>loanId</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Reference to the associated loan</td>
+        </tr>
+        <tr>
+          <td>amount</td>
+          <td><code>number</code></td>
+          <td>Yes</td>
+          <td>Payment amount in the base currency</td>
+        </tr>
+        <tr>
+          <td>method</td>
+          <td><code>PaymentMethod</code></td>
+          <td>Yes</td>
+          <td>Payment method used for the transaction</td>
+        </tr>
+        <tr>
+          <td>status</td>
+          <td><code>PaymentStatus</code></td>
+          <td>Yes</td>
+          <td>Current status of the payment</td>
+        </tr>
+        <tr>
+          <td>processedAt</td>
+          <td><code>string</code></td>
+          <td>Yes</td>
+          <td>Timestamp when the payment was processed</td>
+        </tr>
+        <tr>
+          <td>reference</td>
+          <td><code>string | undefined</code></td>
+          <td>No</td>
+          <td>Optional external reference number</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

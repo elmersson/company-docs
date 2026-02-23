@@ -1,0 +1,76 @@
+<article class="endpoint-documentation">
+  <header>
+    <h2 class="endpoint-title">
+      <span class="method-badge method-put">PUT</span>
+      /loans/:id
+      <span class="badge badge-new">New</span>
+    </h2>
+  </header>
+
+  <section class="endpoint-description">
+    <p>Updates an existing loan by ID.</p>
+  </section>
+
+  <section class="authentication">
+    <h3>Authentication & Validation</h3>
+    <ul>
+      <li><strong>Authentication:</strong> Required (auth middleware)</li>
+      <li><strong>Validation:</strong> Request body validation enabled</li>
+    </ul>
+  </section>
+
+  <section class="path-parameters">
+    <h3>Path Parameters</h3>
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>The unique identifier of the loan to update</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="example-request">
+    <h3>Example Request</h3>
+    <pre class="example-block"><code>PUT /loans/12345 HTTP/1.1
+Authorization: Bearer your-jwt-token
+Content-Type: application/json
+
+{
+  "amount": 15000,
+  "interestRate": 5.5,
+  "term": 24,
+  "status": "approved"
+}</code></pre>
+  </section>
+
+  <section class="example-response">
+    <h3>Example Response</h3>
+    <pre class="example-block"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "12345",
+  "amount": 15000,
+  "interestRate": 5.5,
+  "term": 24,
+  "status": "approved",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}</code></pre>
+  </section>
+
+  <section class="source-info">
+    <p><small>Defined in <code>src/routes/loan.routes.ts</code> at line 17</small></p>
+  </section>
+</article>
