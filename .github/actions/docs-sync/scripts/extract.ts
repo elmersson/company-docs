@@ -10,6 +10,9 @@
 import { extractAndDiff } from "../../../../packages/docs-extractor/src/index.js"
 import type { ExtractorConfig } from "../../../../packages/docs-extractor/src/index.js"
 import { writeFileSync } from "fs"
+import { join } from "path"
+
+const SYNC_DIR = process.env.SYNC_DIR ?? "/tmp/docs-sync"
 
 // ---------------------------------------------------------------------------
 // Build extractor config from environment variables
@@ -70,8 +73,8 @@ const isEmpty =
 if (isEmpty) {
   console.log("No extractable changes found. Skipping documentation generation.")
   // Write empty files so downstream steps don't fail on missing files
-  writeFileSync("/tmp/docs-sync/changeset.json", JSON.stringify(changeSet, null, 2))
-  writeFileSync("/tmp/docs-sync/breaking-changes.json", JSON.stringify([], null, 2))
+  writeFileSync(join(SYNC_DIR, "changeset.json"), JSON.stringify(changeSet, null, 2))
+  writeFileSync(join(SYNC_DIR, "breaking-changes.json"), JSON.stringify([], null, 2))
   process.exit(0)
 }
 
@@ -79,9 +82,9 @@ if (isEmpty) {
 // Write output
 // ---------------------------------------------------------------------------
 
-writeFileSync("/tmp/docs-sync/changeset.json", JSON.stringify(changeSet, null, 2))
+writeFileSync(join(SYNC_DIR, "changeset.json"), JSON.stringify(changeSet, null, 2))
 
-writeFileSync("/tmp/docs-sync/breaking-changes.json", JSON.stringify(breakingChanges, null, 2))
+writeFileSync(join(SYNC_DIR, "breaking-changes.json"), JSON.stringify(breakingChanges, null, 2))
 
 console.log(`Extraction complete:`)
 console.log(`  API: +${changeSet.api.added.length} ~${changeSet.api.updated.length} -${changeSet.api.removed.length}`)

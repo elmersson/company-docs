@@ -13,17 +13,19 @@
  */
 
 import { readFileSync, existsSync } from "fs"
+import { join } from "path"
 import type { BreakingChange } from "../../../../contracts/BreakingChange.js"
 
 // ---------------------------------------------------------------------------
 // Read environment
 // ---------------------------------------------------------------------------
 
+const SYNC_DIR = process.env.SYNC_DIR ?? "/tmp/docs-sync"
 const prNumber = process.env.PR_NUMBER ?? "0"
 const docsPrUrl = process.env.DOCS_PR_URL ?? ""
 const token = process.env.GITHUB_TOKEN!
 const repo = process.env.GITHUB_REPOSITORY!
-const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? "/tmp/docs-sync/breaking-changes.json"
+const breakingChangesPath = process.env.BREAKING_CHANGES_PATH ?? join(SYNC_DIR, "breaking-changes.json")
 
 // ---------------------------------------------------------------------------
 // Read breaking changes
